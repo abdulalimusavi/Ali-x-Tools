@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Ali x Tools — AI Tools Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <canvas id="circuit-canvas"></canvas>
+    <div class="bg-particles" id="bg-particles"></div>
+
+    <button id="support-btn" class="support-fab" title="Support this project">💜 Support</button>
+
+    <!-- MOBILE NAV -->
+    <nav class="mobile-nav">
+        <div class="nav-inner">
+            <div class="nav-brand">
+                <span class="nav-logo">⚡</span>
+                <span class="nav-title"><span>Ali x Tools</span></span>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="nav-menu" id="nav-menu">
+            <div class="nav-search-wrap">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="mobile-search" placeholder="Search tools..." autocomplete="off" />
+            </div>
+            <div class="nav-cat-label">Browse by Category</div>
+            <div class="nav-filters" id="nav-filters"></div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-inner">
+            <div class="badge"><span class="badge-dot"></span>The sum total of excellence is knowledge — Imam Ali a.s.</div>
+            <h1>AI Tools <span>Library</span></h1>
+            <p class="subtitle">Personal collection of 789+ AI &amp; web tools  from art generators to research assistants</p>
+            <div class="stats-row">
+                <div class="stat"><span class="stat-num" id="total-tools">1000+</span><span class="stat-label">Total Tools</span></div>
+                <div class="stat"><span class="stat-num" id="total-cats">18+</span><span class="stat-label">Categories</span></div>
+                <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Free / Freemium</span></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- DESKTOP CONTROLS -->
+    <div class="controls" id="desktop-controls">
+        <div class="controls-inner">
+            <div class="search-wrap">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="search" placeholder="Search tools, descriptions, URLs..." autocomplete="off" />
+            </div>
+            <div class="filters" id="desktop-filters"></div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content">
+        <div id="no-results"><span>🔍</span>No tools match your search.</div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-bolt">⚡</div>
+        <span>AI TOOLS LIBRARY &nbsp;·&nbsp; CLICK ANY CARD TO OPEN THE TOOL</span>
+        <div class="footer-support" id="footer-support">
+            <h3>💜 Support This Project</h3>
+            <p>If this library helps you, consider sending a small contribution so I can keep adding more free resources.</p>
+            <p class="bank-line">Account Name: <span>ABDUL ALI SHAH</span></p>
+            <p class="bank-line">Account Number: <span>12630107567724</span></p>
+            <p class="bank-line">Bank: <span>Meezan Bank</span></p>
+        </div>
+    </footer>
+
+    <script>
+        /* =============================================
+           AI TOOLS LIBRARY — app.js (embedded)
+           All tools merged from existing DB + PDF
+           ============================================= */
+
+        // ⚡ CIRCUIT ANIMATION
+        (function() {
+            const canvas = document.getElementById('circuit-canvas');
+            const ctx = canvas.getContext('2d');
+            let W, H,
+                nodes = [],
+                packets = [],
+                scanY = 0,
+                hexCells = [];
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+                buildHexGrid();
+                initNodes();
+            }
+
+            function buildHexGrid() {
+                hexCells = [];
+                const size = 38,
+                    cols = Math.ceil(W / (size * 1.75)) + 2,
+                    rows = Math.ceil(H / (size * 1.52)) + 2;
+                for (let r = 0; r < rows; r++)
+                    for (let c = 0; c < cols; c++) {
+                        const x = c * size * 1.73 + (r % 2 === 0 ? 0 : size * 0.87);
+                        const y = r * size * 1.52;
+                        hexCells.push({ x, y, size, pulse: Math.random() * Math.PI * 2, speed: 0.003 + Math.random() * 0.006,
+                            bright: Math.random() });
+                    }
+            }
+
+            function drawHex(x, y, s, alpha) {
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const a = Math.PI / 3 * i - Math.PI / 6;
+                    i === 0 ? ctx.moveTo(x + s * Math.cos(a), y + s * Math.sin(a)) : ctx.lineTo(x + s * Math.cos(a), y + s *
+                        Math.sin(a));
+                }
+                ctx.closePath();
+                ctx.strokeStyle = `rgba(255,0,68,${alpha})`;
+                ctx.lineWidth = 0.6;
+                ctx.stroke();
+            }
+
+            function initNodes() {
+                const count = Math.min(Math.floor((W * H) / 28000), 55);
+                nodes = [];
+                for (let i = 0; i < count; i++)
+                    nodes.push({
+                        x: Math.random() * W,
+                        y: Math.random() * H,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        r: 1.2 + Math.random() * 1.8,
+                        pulse: Math.random() * Math.PI * 2,
+                        type: Math.random() < 0.15 ? 'hub' : 'node'
+                    });
+            }
+
+            function maybeSpawnPacket() {
+                if (packets.length > 18 || Math.random() > 0.03) return;
+                const a = nodes[Math.floor(Math.random() * nodes.length)];
+                const b = nodes[Math.floor(Math.random() * nodes.length)];
+                if (a === b) return;
+                const colors = ['rgba(255,0,68,', 'rgba(255,26,74,', 'rgba(204,0,51,'];
+                packets.push({ ax: a.x, ay: a.y, bx: b.x, by: b.y, t: 0, speed: 0.012 + Math.random() * 0.018,
+                    color: colors[Math.floor(Math.random() * colors.length)] });
+            }
+
+            resize();
+            window.addEventListener('resize', resize);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, W, H);
+                hexCells.forEach(h => {
+                    h.pulse += h.speed;
+                    const alpha = 0.018 + Math.sin(h.pulse) * 0.013 * h.bright;
+                    drawHex(h.x, h.y, h.size, Math.max(0, alpha));
+                });
+                scanY = (scanY + 0.55) % H;
+                const sg = ctx.createLinearGradient(0, scanY - 60, 0, scanY + 60);
+                sg.addColorStop(0, 'rgba(255,0,68,0)');
+                sg.addColorStop(0.5, 'rgba(255,0,68,0.04)');
+                sg.addColorStop(1, 'rgba(255,0,68,0)');
+                ctx.fillStyle = sg;
+                ctx.fillRect(0, scanY - 60, W, 120);
+                nodes.forEach(n => {
+                    n.x += n.vx;
+                    n.y += n.vy;
+                    if (n.x < 0 || n.x > W) n.vx *= -1;
+                    if (n.y < 0 || n.y > H) n.vy *= -1;
+                    n.pulse += 0.018;
+                });
+                for (let i = 0; i < nodes.length; i++)
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const a = nodes[i],
+                            b = nodes[j],
+                            dx = a.x - b.x,
+                            dy = a.y - b.y,
+                            dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 155) {
+                            ctx.beginPath();
+                            ctx.moveTo(a.x, a.y);
+                            ctx.lineTo(b.x, b.y);
+                            ctx.strokeStyle = `rgba(255,0,68,${(1 - dist / 155) * 0.22})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+                nodes.forEach(n => {
+                    const glow = 0.5 + Math.sin(n.pulse) * 0.5;
+                    const isHub = n.type === 'hub';
+                    const r = (isHub ? n.r * 2.2 : n.r) + glow * 0.6;
+                    if (isHub) {
+                        ctx.beginPath();
+                        ctx.arc(n.x, n.y, r + 4, 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(255,0,68,${0.12 + glow * 0.1})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                    }
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+                    ctx.fillStyle = isHub ? `rgba(255,26,74,${0.55 + glow * 0.3})` : `rgba(255,0,68,${0.38 + glow * 0.32})`;
+                    ctx.shadowColor = isHub ? '#ff1a4a' : '#ff0044';
+                    ctx.shadowBlur = isHub ? 14 : 8;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                });
+                maybeSpawnPacket();
+                packets = packets.filter(p => p.t <= 1);
+                packets.forEach(p => {
+                    p.t += p.speed;
+                    const x = p.ax + (p.bx - p.ax) * p.t,
+                        y = p.ay + (p.by - p.ay) * p.t;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color + '0.9)';
+                    ctx.shadowColor = p.color + '1)';
+                    ctx.shadowBlur = 12;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    const tx = p.ax + (p.bx - p.ax) * Math.max(0, p.t - 0.06),
+                        ty = p.ay + (p.by - p.ay) * Math.max(0, p.t - 0.06);
+                    ctx.beginPath();
+                    ctx.moveTo(tx, ty);
+                    ctx.lineTo(x, y);
+                    ctx.strokeStyle = p.color + '0.35)';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                });
+            }
+            animate();
+        })();
+
+        // Background particles
+        (function() {
+            const container = document.getElementById('bg-particles');
+            for (let i = 0; i < 35; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = 1 + Math.random() * 3;
+                const color = Math.random() < 0.5 ? '#ff0044' : (Math.random() < 0.7 ? '#ff1a4a' : '#cc0033');
+                p.style.cssText =
+                    `width:${size}px;height:${size}px;left:${Math.random()*100}%;--dur:${6+Math.random()*12}s;--delay:${Math.random()*10}s;opacity:0;background:${color};color:${color};`;
+                container.appendChild(p);
+            }
+        })();
+
+        // Support button
+        document.getElementById('support-btn').addEventListener('click', () => {
+            const target = document.getElementById('footer-support');
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.classList.add('highlight');
+            setTimeout(() => target.classList.remove('highlight'), 2000);
+        });
+
+        // Hamburger
+        const hamburger = document.getElementById('hamburger'),
+            navMenu = document.getElementById('nav-menu');
+        hamburger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hamburger.classList.toggle('open');
+            navMenu.classList.toggle('open');
+        });
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove('open');
+                navMenu.classList.remove('open');
+            }
+        });
+
+        // =============================================
+        // TOOLS DATA — Merged from existing DB + PDF
+        // =============================================
+        const TOOLS = [
+            // ─── AI ASSISTANTS & CHAT ───
+            { num: 401, name: "ChatGPT", url: "https://chatgpt.com/", desc: "Conversational AI assistant for writing, coding, research and more.",
+                cat: "ai-assistants" },
+            { num: 402, name: "Google Gemini", url: "https://gemini.google.com/", desc: "Google's multimodal AI assistant for text, images and more.",
+                cat: "ai-assistants" },
+            { num: 403, name: "Microsoft Copilot", url: "https://copilot.microsoft.com/",
+                desc: "AI assistant integrated across Windows and Microsoft Office.", cat: "ai-assistants" },
+            { num: 11, name: "Perplexity AI", url: "https://www.perplexity.ai/",
+                desc: "Answer engine delivering cited results for research.", cat: "ai-assistants" },
+            { num: 404, name: "Pi by Inflection", url: "https://pi.ai/", desc: "Friendly conversational AI companion for everyday chat.",
+                cat: "ai-assistants" },
+            { num: 405, name: "Character.AI", url: "https://character.ai/", desc: "Create and chat with AI characters of all kinds.",
+                cat: "ai-assistants" },
+            { num: 406, name: "Poe", url: "https://poe.com/", desc: "Access multiple AI chatbots from one unified interface.",
+                cat: "ai-assistants" },
+            { num: 407, name: "You.com", url: "https://you.com/", desc: "AI-powered search and chat assistant you control.",
+                cat: "ai-assistants" },
+            { num: 408, name: "Manus", url: "https://manus.im/", desc: "Agentic AI that plans and executes multi-step tasks autonomously.",
+                cat: "ai-assistants" },
+            { num: 409, name: "Lindy", url: "https://www.lindy.ai/", desc: "Build AI agents that automate emails, calendars and workflows.",
+                cat: "ai-assistants" },
+            { num: 60, name: "GenSpark", url: "https://www.genspark.ai/", desc: "AI agent best for coding tasks and complex research.",
+                cat: "ai-assistants" },
+            { num: 1, name: "Claude 2", url: "https://claude.ai/", desc: "Advanced AI model with 100K token context and strong reasoning.",
+                cat: "ai-assistants" },
+            { num: 6, name: "Agent GPT", url: "https://agentgpt.reworkd.ai/", desc: "Autonomous AI agents that solve tasks collaboratively.",
+                cat: "ai-assistants" },
+            { num: 8, name: "Camel AGI", url: "https://camelagi.thesamur.ai/conversation",
+                desc: "Watch two AI agents collaborate to solve tasks.", cat: "ai-assistants" },
+            { num: 10, name: "AIWebTools Multitasker", url: "https://app.brancher.ai/1da88efe-6e1b-46fc-87ac-bcd34bc4f273",
+                desc: "Free private GPT-3 multitasker, no login required.", cat: "ai-assistants" },
+            { num: 12, name: "Chat D-ID", url: "https://chat.d-id.com/", desc: "Real-time conversations with lifelike digital humans.",
+                cat: "ai-assistants" },
+            { num: 13, name: "TeamAI", url: "https://teamai.com/", desc: "Collaborative AI platform for teams — GPT-4, Claude, PaLM.",
+                cat: "ai-assistants" },
+            { num: 14, name: "ChatSonic", url: "https://writesonic.com/chat?ref=aiwebtools",
+                desc: "GPT-4 powered conversational AI with image generation.", cat: "ai-assistants" },
+            { num: 15, name: "Chat IQ", url: "https://chatiq.ai/?via=aiwebtools", desc: "Build custom ChatGPT chatbots with your own data.",
+                cat: "ai-assistants" },
+            { num: 16, name: "Bland.ai", url: "https://bland.ai/", desc: "AI phone agents that automate calls and customer service.",
+                cat: "ai-assistants" },
+            { num: 17, name: "Chatbot Arena", url: "https://chat.lmsys.org/", desc: "Vote and compare anonymous chatbot models.",
+                cat: "ai-assistants" },
+            { num: 18, name: "ChainGPT", url: "https://www.chaingpt.org/", desc: "AI for blockchain, crypto trading and smart contracts.",
+                cat: "ai-assistants" },
+            { num: 19, name: "ChatBotGPT.ai", url: "https://www.chatbotgpt.ai/?via=aiwebtools",
+                desc: "No-code custom ChatGPT bot trained on your data.", cat: "ai-assistants" },
+            { num: 20, name: "Call Annie AI", url: "https://callannie.ai/", desc: "FaceTime AI companion for conversation and activities.",
+                cat: "ai-assistants" },
+            { num: 21, name: "Forefront.AI", url: "https://www.forefront.ai/?ref=aiwebtools",
+                desc: "AI assistant for work with file handling and internet research.", cat: "ai-assistants" },
+            { num: 22, name: "FinChat.io", url: "https://finchat.io/", desc: "AI finance assistant with data on 50,000+ public companies.",
+                cat: "ai-assistants" },
+            { num: 23, name: "Freedom GPT", url: "https://www.freedomgpt.com/", desc: "Run AI models locally in your browser — no signup.",
+                cat: "ai-assistants" },
+            { num: 24, name: "Chat GPT Prompt Generator", url: "https://app.brancher.ai/e0aac9b1-5ee9-4401-9651-b44615fed004",
+                desc: "Generate 25 ChatGPT prompts on any topic for free.", cat: "ai-assistants" },
+            { num: 26, name: "GPTGO.ai", url: "https://gptgo.ai/?hl=en", desc: "ChatGPT combined with a search engine, free in 50+ languages.",
+                cat: "ai-assistants" },
+            { num: 27, name: "GPT Workspace", url: "https://gpt.space/", desc: "ChatGPT integrated into Google Docs, Sheets, Gmail.",
+                cat: "ai-assistants" },
+            { num: 28, name: "Cody", url: "https://meetcody.ai/?fpr=aiwebtools",
+                desc: "AI assistant trained on your business knowledge base.", cat: "ai-assistants" },
+            { num: 30, name: "Magai", url: "https://magai.co/?via=aiwebtools",
+                desc: "Access multiple AI chatbots and tools in one subscription.", cat: "ai-assistants" },
+            { num: 31, name: "Merlin", url: "https://app.getmerlin.in/plans?ref=mte1mgu4",
+                desc: "ChatGPT supercharger for Gmail, YouTube, Twitter and LinkedIn.", cat: "ai-assistants" },
+            { num: 32, name: "MiniGPT-4", url: "https://minigpt-4.github.io/", desc: "Vision-language AI that describes images and creates websites.",
+                cat: "ai-assistants" },
+            { num: 33, name: "MYCharacter-GPT", url: "https://mycharacter.ai/signup?referral_code=208dce5e-9fd0-42a6-9002-f045d22d694f",
+                desc: "Craft interactive AI characters with unique personalities.", cat: "ai-assistants" },
+            { num: 35, name: "ProMind GPT", url: "https://promind.ai/minds/", desc: "Cutting-edge AI model for content and conversation.",
+                cat: "ai-assistants" },
+            { num: 36, name: "Jason AI", url: "https://get.reply.io/aiwebtools",
+                desc: "B2B conversational AI that automates sales outreach.", cat: "ai-assistants" },
+            { num: 37, name: "RoboAI iOS", url: "https://apps.apple.com/us/app/roboco-ai-chatbot-assistant/id1662905686",
+                desc: "GPT-4 and GPT-3.5 on iOS with shortcuts for many tasks.", cat: "ai-assistants" },
+            { num: 39, name: "You.com", url: "https://you.com/", desc: "AI search engine with GPT-4 and image generation.",
+                cat: "ai-assistants" },
+            { num: 40, name: "ExperAI", url: "https://www.experai.com/", desc: "Generate AI experts and share them with friends.",
+                cat: "ai-assistants" },
+            { num: 582, name: "POE", url: "https://poe.com/login", desc: "AI chat assistant powered by Claude, GPT, and Llama.",
+                cat: "ai-assistants" },
+            { num: 906, name: "FlowGPT", url: "https://flowgpt.com/chat", desc: "Free access to advanced AI chatbots including GPT-4.",
+                cat: "ai-assistants" },
+            { num: 863, name: "Monica", url: "https://monica.im/?c=YDZSYQHT", desc: "GPT-4 powered assistant with 80+ copywriting templates.",
+                cat: "ai-assistants" },
+            { num: 369, name: "GPT4ALL", url: "https://gpt4all.io", desc: "Local uncensored LLM that runs offline on your device.",
+                cat: "ai-assistants" },
+            { num: 663, name: "WAGPT", url: "https://wagpt.io/", desc: "ChatGPT on WhatsApp with voice and text messaging.",
+                cat: "ai-assistants" },
+            { num: 700, name: "Character AI", url: "https://beta.character.ai/", desc: "Chat with AI characters — web and voice interactions.",
+                cat: "ai-assistants" },
+
+            // ─── IMAGE GENERATION ───
+            { num: 410, name: "Midjourney", url: "https://www.midjourney.com/",
+                desc: "Generate highly artistic, photorealistic and stylized images.", cat: "image-gen" },
+            { num: 411, name: "DALL-E 3", url: "https://openai.com/dall-e-3", desc: "OpenAI's powerful text-to-image generator.",
+                cat: "image-gen" },
+            { num: 412, name: "Stable Diffusion", url: "https://stability.ai/",
+                desc: "Open-source text-to-image model you can run locally.", cat: "image-gen" },
+            { num: 413, name: "Leonardo.Ai", url: "https://leonardo.ai/",
+                desc: "AI image generator optimized for game assets and concepts.", cat: "image-gen" },
+            { num: 414, name: "Adobe Firefly", url: "https://firefly.adobe.com/",
+                desc: "Adobe's generative AI for commercial-safe images.", cat: "image-gen" },
+            { num: 416, name: "Krea AI", url: "https://www.krea.ai/", desc: "Real-time AI image and video generation canvas.",
+                cat: "image-gen" },
+            { num: 417, name: "Recraft", url: "https://www.recraft.ai/",
+                desc: "Generate consistent vector graphics aligned with your brand.", cat: "image-gen" },
+            { num: 25, name: "Ideogram", url: "https://ideogram.ai/",
+                desc: "Make beautiful logos and creative designs with text rendering.", cat: "image-gen" },
+            { num: 97, name: "Molypix.ai", url: "https://molypix.ai/", desc: "Create stunning posters and images with a single prompt.",
+                cat: "image-gen" },
+            { num: 129, name: "Playground", url: "https://playground.com/", desc: "Free AI image creator — design anything like a pro.",
+                cat: "image-gen" },
+            { num: 914, name: "Dezgo", url: "https://dezgo.com/", desc: "Generate high-quality images from a text prompt instantly.",
+                cat: "image-gen" },
+            { num: 901, name: "Artbreeder", url: "https://artbreeder.com/", desc: "Collaborative tool for blending and generating images.",
+                cat: "image-gen" },
+            { num: 934, name: "NightCafe", url: "https://nightcafe.studio/", desc: "Popular AI art generator app with multiple styles.",
+                cat: "image-gen" },
+            { num: 945, name: "StableCog", url: "https://stablecog.com/", desc: "Free, easy multilingual open-source AI image generator.",
+                cat: "image-gen" },
+            { num: 946, name: "Starryai", url: "https://starryai.com/", desc: "AI art generator app with full ownership of creations.",
+                cat: "image-gen" },
+            { num: 924, name: "Getimg.ai", url: "https://getimg.ai/", desc: "Everything you need to create and edit images with AI.",
+                cat: "image-gen" },
+            { num: 911, name: "Deep Dream Generator", url: "https://deepdreamgenerator.com/",
+                desc: "Human–AI collaboration to create surreal visuals.", cat: "image-gen" },
+            { num: 145, name: "Midjourney", url: "https://www.midjourney.com", desc: "Top-tier AI image generation via Discord.",
+                cat: "image-gen" },
+            { num: 146, name: "DALL·E 2", url: "https://openai.com/dall-e-2", desc: "OpenAI's AI system for realistic image generation.",
+                cat: "image-gen" },
+            { num: 147, name: "BlueWillow AI", url: "https://www.bluewillow.ai/",
+                desc: "Free text-to-image generator similar to Midjourney.", cat: "image-gen" },
+            { num: 148, name: "NightCafe Studio", url: "https://creator.nightcafe.studio/",
+                desc: "AI art generator with neural style transfer and text-to-image.", cat: "image-gen" },
+            { num: 149, name: "Leonardo AI", url: "https://leonardo.ai/", desc: "Free AI image generator for game assets and art.",
+                cat: "image-gen" },
+            { num: 152, name: "Bing Image Generator", url: "https://www.bing.com/create?via=aiwebtools",
+                desc: "DALL-E 3 powered image generator, free with daily limits.", cat: "image-gen" },
+            { num: 176, name: "Craiyon", url: "https://www.craiyon.com/", desc: "AI image generator specializing in icons and drawings.",
+                cat: "image-gen" },
+            { num: 204, name: "Lexica", url: "https://lexica.art/", desc: "Text-to-image generator with a large prompt library.",
+                cat: "image-gen" },
+            { num: 206, name: "Mage Space", url: "https://www.mage.space/", desc: "Stable Diffusion powered image generator with 60+ models.",
+                cat: "image-gen" },
+            { num: 234, name: "Pollinations", url: "https://replicate.com/pollinations",
+                desc: "Free AI image generator powered by Stable Diffusion.", cat: "image-gen" },
+            { num: 250, name: "DreamStudio", url: "https://dreamstudio.ai/",
+                desc: "Stable Diffusion image generation with a user-friendly interface.", cat: "image-gen" },
+            { num: 252, name: "StockIMG", url: "https://stockimg.ai/", desc: "AI-powered stock image generation for creators.",
+                cat: "image-gen" },
+            { num: 862, name: "Würstchen", url: "https://huggingface.co/spaces/warp-ai/Wuerstchen",
+                desc: "High-performance text-to-image architecture for high-res images.", cat: "image-gen" },
+            { num: 860, name: "Ideogram", url: "https://ideogram.ai/", desc: "AI image generation with exceptional text-in-image rendering.",
+                cat: "image-gen" },
+            { num: 893, name: "IMG Creator", url: "https://imgcreator.zmo.ai/?via=aiwebtools",
+                desc: "AI image generator with face swapping and portrait transformation.", cat: "image-gen" },
+            { num: 895, name: "Enterpix", url: "https://www.enterpix.app/", desc: "AI-powered image search engine for creatives.",
+                cat: "image-gen" },
+            { num: 896, name: "AlpacaML", url: "https://www.alpacaml.com/",
+                desc: "AI toolkit for artists integrated with Adobe Photoshop.", cat: "image-gen" },
+            { num: 914, name: "SeaArt", url: "https://www.seaart.ai/", desc: "Free web-based image generation platform.",
+                cat: "image-gen" },
+
+            // ─── IMAGE EDITING & TOOLS ───
+            { num: 1, name: "PhotoRestore.io", url: "https://www.photorestore.io/",
+                desc: "Restore old photos, enhance quality, remove backgrounds and add color.", cat: "image-edit" },
+            { num: 12, name: "Magic Eraser", url: "https://magicstudio.com/magiceraser/",
+                desc: "Upload, select what to remove, erase and download — no signup.", cat: "image-edit" },
+            { num: 26, name: "Remove.bg", url: "https://www.remove.bg/", desc: "Remove image backgrounds automatically in seconds.",
+                cat: "image-edit" },
+            { num: 28, name: "ImgUpscaler", url: "https://imgupscaler.com/",
+                desc: "Smart AI image upscaler — enhance JPG, PNG, WEBP images in batch.", cat: "image-edit" },
+            { num: 29, name: "Watermark Remover", url: "https://www.watermarkremover.io/",
+                desc: "Remove watermarks from images precisely with AI.", cat: "image-edit" },
+            { num: 47, name: "Clipdrop", url: "https://clipdrop.co/", desc: "Remove background, cleanup pictures, upscale with AI.",
+                cat: "image-edit" },
+            { num: 52, name: "Cleanup.pictures", url: "https://cleanup.pictures/", desc: "Remove unwanted objects from pictures simply.",
+                cat: "image-edit" },
+            { num: 415, name: "Photoroom", url: "https://www.photoroom.com/", desc: "Remove backgrounds and create stunning product photos.",
+                cat: "image-edit" },
+            { num: 420, name: "Let's Enhance", url: "https://letsenhance.io/", desc: "Upscale photo resolution up to 16x with AI.",
+                cat: "image-edit" },
+            { num: 147, name: "Squoosh", url: "https://squoosh.app/", desc: "Reduce image file size while maintaining high quality.",
+                cat: "image-edit" },
+            { num: 180, name: "Palette.fm", url: "https://palette.fm/", desc: "Colorize B&W photos automatically with AI filters.",
+                cat: "image-edit" },
+            { num: 244, name: "NoMoreCopyright", url: "https://nomorecopyright.com/",
+                desc: "Upload a copyrighted image and get a copyright-free version.", cat: "image-edit" },
+            { num: 140, name: "Text Behind Image", url: "https://textbehindimage.com/",
+                desc: "Create text-behind-image designs in seconds with AI.", cat: "image-edit" },
+            { num: 906, name: "Bg Eraser", url: "https://bgeraser.com/", desc: "Magic eraser for picture cleanup and background removal.",
+                cat: "image-edit" },
+            { num: 913, name: "Designify", url: "https://designify.com/", desc: "Turn any photo into awesome professional product photos.",
+                cat: "image-edit" },
+            { num: 938, name: "Pixian", url: "https://pixian.ai/", desc: "Remove image backgrounds in high resolution for free.",
+                cat: "image-edit" },
+            { num: 941, name: "Removal.ai", url: "https://removal.ai/", desc: "AI background remover in high resolution, free to use.",
+                cat: "image-edit" },
+            { num: 167, name: "TinEye", url: "https://tineye.com/", desc: "Reverse image search across 76+ billion images online.",
+                cat: "image-edit" },
+            { num: 221, name: "PimEyes", url: "https://pimeyes.com/", desc: "Upload a photo and find where it appears online.",
+                cat: "image-edit" },
+            { num: 32, name: "Immersity.ai", url: "https://www.immersity.ai/",
+                desc: "Convert any image or video into an immersive 3D experience.", cat: "image-edit" },
+            { num: 161, name: "Pixcleaner", url: "https://pixcleaner.com/", desc: "AI background removal with smart touch editing.",
+                cat: "image-edit" },
+            { num: 171, name: "ClickMajic", url: "https://clickmajic.com/", desc: "AI background remover for photos, supports 1000+ images.",
+                cat: "image-edit" },
+            { num: 172, name: "Clipdrop.co", url: "https://clipdrop.co/",
+                desc: "Suite of AI tools: Stable Diffusion XL, Uncrop, Cleanup, Relight.", cat: "image-edit" },
+            { num: 179, name: "Cutout.pro", url: "https://www.cutout.pro/?vsource=cutout_share-406567850369093",
+                desc: "AI visual design platform with background removal and photo enhancement.", cat: "image-edit" },
+            { num: 181, name: "Deep-Image.ai", url: "https://deep-image.ai/",
+                desc: "AI image upscaling, color correction, background removal.", cat: "image-edit" },
+            { num: 188, name: "Fotor", url: "https://www.fotor.com/",
+                desc: "Online photo editor with AI enhancements, background removal, and collage maker.", cat: "image-edit" },
+            { num: 190, name: "FaceApp", url: "https://www.faceapp.com/", desc: "AI photo editing app with 60+ filters and effects.",
+                cat: "image-edit" },
+            { num: 196, name: "LetsEnhance.io", url: "https://letsenhance.io/",
+                desc: "Enhance and upscale images with AI, generate AI art in high quality.", cat: "image-edit" },
+            { num: 198, name: "IMGlarger", url: "https://shareasale.com/r.cfm?b=1434994&u=3604681&m=92386&urllink=&afftrack=",
+                desc: "AI image enhancer and upscaler up to 8K resolution.", cat: "image-edit" },
+            { num: 202, name: "Lensa", url: "https://prisma-ai.com/lensa", desc: "AI photo editing app with Magic Correction and background blur.",
+                cat: "image-edit" },
+            { num: 207, name: "Magic Eraser", url: "https://magicstudio.com/?via=aiwebtools",
+                desc: "Remove unwanted elements from photos easily, no signup required.", cat: "image-edit" },
+            { num: 208, name: "Media.io", url: "https://www.media.io/",
+                desc: "AI-powered media editing for video, audio, and images.", cat: "image-edit" },
+            { num: 225, name: "PicWish", url: "https://picwish.com/", desc: "AI image processing: background removal, unblur, upscale.",
+                cat: "image-edit" },
+            { num: 226, name: "PimEyes", url: "https://pimeyes.com/en", desc: "Facial recognition and reverse image search engine.",
+                cat: "image-edit" },
+            { num: 227, name: "Pixlr", url: "https://shareasale.com/r.cfm?b=1494940&u=3604681&m=94987&urllink=&afftrack=",
+                desc: "Online photo editor with AI image generator and background removal.", cat: "image-edit" },
+            { num: 230, name: "Photopea", url: "https://www.photopea.com/", desc: "Free web-based image editor similar to Photoshop.",
+                cat: "image-edit" },
+            { num: 232, name: "PhotoKit", url: "https://photokit.com/landing/coupon.html?aid=2848457",
+                desc: "Online photo editor with batch processing and background removal.", cat: "image-edit" },
+            { num: 233, name: "PlaygroundAI", url: "https://playgroundai.com/",
+                desc: "Mixed image editing combining real and synthetic images.", cat: "image-edit" },
+            { num: 237, name: "Pixelcut", url: "https://www.pixelcut.ai/", desc: "AI-generated backgrounds for product photos.",
+                cat: "image-edit" },
+            { num: 241, name: "RestorePhotos.io", url: "https://www.restorephotos.io/",
+                desc: "Revive old and blurry photos with AI for free.", cat: "image-edit" },
+            { num: 260, name: "VanceAI", url: "https://vanceai.com/", desc: "AI photo enhancement: upscaling, sharpening, denoising.",
+                cat: "image-edit" },
+            { num: 261, name: "WatermarkRemover.io", url: "https://www.watermarkremover.io/",
+                desc: "Remove watermarks from images using advanced AI.", cat: "image-edit" },
+            { num: 269, name: "PicWonderful", url: "https://www.picwonderful.com/",
+                desc: "AI photo toolkit with text-to-image and background removal.", cat: "image-edit" },
+            { num: 271, name: "RemBG.pics", url: "https://www.rembg.pics/", desc: "Remove backgrounds from images with AI.",
+                cat: "image-edit" },
+            { num: 272, name: "ObjectRemover", url: "https://objectremover.com/image-cleaner",
+                desc: "Remove unwanted objects from images with AI.", cat: "image-edit" },
+            { num: 277, name: "Palette.fm", url: "https://palette.fm/?via=aiwebtools",
+                desc: "AI colorization tool for black and white photos.", cat: "image-edit" },
+            { num: 280, name: "Image Colorizer", url: "https://imagecolorizer.com/",
+                desc: "AI tool to restore and colorize old family photos.", cat: "image-edit" },
+            { num: 867, name: "Palette.Fm", url: "https://palette.fm/?via=aiwebtools",
+                desc: "World's best AI to colorize black and white photos.", cat: "image-edit" },
+
+            // ─── AVATARS & PORTRAITS ───
+            { num: 952, name: "AI Profile Pictures", url: "https://aiprofilepictures.com/",
+                desc: "Generate stunning AI profile pictures in various styles.", cat: "avatars" },
+            { num: 954, name: "AvatarAI", url: "https://avatarai.me/", desc: "Create photorealistic AI avatars of yourself.",
+                cat: "avatars" },
+            { num: 418, name: "PhotoAI", url: "https://photoai.com/", desc: "Generate realistic AI photos of yourself in any setting.",
+                cat: "avatars" },
+            { num: 955, name: "DreamPic", url: "https://dreampic.ai/", desc: "AI generated pictures starring you in any style.",
+                cat: "avatars" },
+            { num: 957, name: "Face Swapper", url: "https://faceswapper.ai/", desc: "Swap faces from photos and videos seamlessly.",
+                cat: "avatars" },
+            { num: 958, name: "Hairgen", url: "https://hairgen.ai/", desc: "Preview your FUE/FUT hair transplant before committing.",
+                cat: "avatars" },
+            { num: 959, name: "HairstyleAI", url: "https://hairstyleai.com/", desc: "Try out new hairstyles with AI before your salon visit.",
+                cat: "avatars" },
+            { num: 960, name: "HeroPack", url: "https://heropack.me/", desc: "AI-generated avatars inspired by video games.",
+                cat: "avatars" },
+            { num: 929, name: "Imagine Me", url: "https://imagineme.ai/", desc: "Generate stunning AI art of yourself in any scenario.",
+                cat: "avatars" },
+            { num: 84, name: "ToonCrafter", url: "https://tooncrafter.net/", desc: "Turn your photos into captivating cartoons with AI.",
+                cat: "avatars" },
+            { num: 912, name: "Deep Nostalgia", url: "https://www.myheritage.com/deep-nostalgia",
+                desc: "Animate old family photos to bring ancestors to life.", cat: "avatars" },
+            { num: 82, name: "Paper Animator", url: "https://paperanimator.com/", desc: "Turn your photo into a paper animator effect.",
+                cat: "avatars" },
+            { num: 224, name: "Deep Nostalgia", url: "http://myheritage.sjy.io/LXXy1o",
+                desc: "Bring family photos to life with facial animation.", cat: "avatars" },
+            { num: 238, name: "PFPmaker", url: "https://pfpmaker.com/", desc: "Create professional profile pictures with AI for free.",
+                cat: "avatars" },
+            { num: 242, name: "Reface.ai", url: "https://reface.ai/unboring",
+                desc: "AI face swap and video restyling for fun and creativity.", cat: "avatars" },
+            { num: 259, name: "UnrealPerson", url: "https://www.unrealperson.com/",
+                desc: "Generate unique images of people that don't exist in reality.", cat: "avatars" },
+            { num: 262, name: "Wombo Me", url: "https://www.wombo.ai/",
+                desc: "Create endless versions of yourself and friends with AI.", cat: "avatars" },
+            { num: 638, name: "PfpMaker", url: "https://pfpmaker.com/",
+                desc: "AI-powered headshot generator for professional profile pictures.", cat: "avatars" },
+            { num: 868, name: "HeadShot Pro", url: "https://www.headshotpro.com/?via=aiwebtools",
+                desc: "Generate 120+ professional corporate headshots in hours.", cat: "avatars" },
+            { num: 869, name: "Profile Picture AI", url: "https://www.profilepicture.ai/?via=aiwebtools",
+                desc: "Create personalized profile pictures from over 350 styles.", cat: "avatars" },
+            { num: 870, name: "Hairstyle AI", url: "https://www.hairstyleai.com/?via=aiwebtools",
+                desc: "Virtual try-on for hairstyles with 30+ AI-generated looks.", cat: "avatars" },
+            { num: 871, name: "In3D", url: "https://in3d.io/",
+                desc: "Create realistic 3D avatars for games and metaverse.", cat: "avatars" },
+            { num: 873, name: "Ready Player Me", url: "https://readyplayer.me/",
+                desc: "Cross-platform avatar creator for games and apps.", cat: "avatars" },
+            { num: 897, name: "Aragon", url: "https://www.aragon.ai/?via=aiwebtools",
+                desc: "Turn selfies into professional AI headshots with various styles.", cat: "avatars" },
+
+            // ─── VIDEO CREATION & EDITING ───
+            { num: 425, name: "Sora", url: "https://openai.com/sora", desc: "OpenAI's revolutionary text-to-video generation model.",
+                cat: "video" },
+            { num: 21, name: "Runway", url: "https://app.runwayml.com/", desc: "Global AI research platform for professional video generation.",
+                cat: "video" },
+            { num: 21, name: "Pika.art", url: "https://pika.art/", desc: "AI-powered video generation from images or text prompts.",
+                cat: "video" },
+            { num: 426, name: "Synthesia", url: "https://www.synthesia.io/",
+                desc: "Create professional videos with AI avatars — no camera needed.", cat: "video" },
+            { num: 427, name: "CapCut", url: "https://www.capcut.com/", desc: "Free video editor with AI captions, effects and templates.",
+                cat: "video" },
+            { num: 428, name: "Veed.io", url: "https://www.veed.io/",
+                desc: "Browser-based video editor with AI subtitles and translation.", cat: "video" },
+            { num: 39, name: "Luma Labs", url: "https://lumalabs.ai/",
+                desc: "Camera Motion Concepts for reliable composable video control.", cat: "video" },
+            { num: 4, name: "Descript", url: "https://web.descript.com/", desc: "Edit video like a document — AI co-editor for your vision.",
+                cat: "video" },
+            { num: 9, name: "InVideo", url: "https://invideo.io/", desc: "Create engaging marketing videos in minutes using AI.",
+                cat: "video" },
+            { num: 58, name: "HeyGen", url: "https://app.heygen.com/", desc: "Make AI avatar videos or create your own custom avatar.",
+                cat: "video" },
+            { num: 126, name: "HailuoAI Video", url: "https://hailuoai.video/",
+                desc: "Best text-to-video generator and visual creativity platform.", cat: "video" },
+            { num: 131, name: "Pollo.ai", url: "https://pollo.ai/", desc: "All-in-one AI video generator for creators.",
+                cat: "video" },
+            { num: 50, name: "Opus.pro", url: "https://www.opus.pro/", desc: "AI curated short clips that perform 100% better on social.",
+                cat: "video" },
+            { num: 18, name: "GetMunch", url: "https://www.getmunch.com/",
+                desc: "Extract the most engaging clips from long-form videos.", cat: "video" },
+            { num: 429, name: "Pictory", url: "https://pictory.ai/", desc: "Turn long-form content into short shareable videos.",
+                cat: "video" },
+            { num: 432, name: "Vidyo.ai", url: "https://vidyo.ai/",
+                desc: "Repurpose long videos into viral short clips automatically.", cat: "video" },
+            { num: 202, name: "Riverside.fm", url: "https://riverside.fm/", desc: "Record in broadcast quality, edit in a flash, go live.",
+                cat: "video" },
+            { num: 186, name: "FlexClip", url: "https://www.flexclip.com/", desc: "Create smarter videos with a full suite of AI tools.",
+                cat: "video" },
+            { num: 115, name: "Cobalt.tools", url: "https://cobalt.tools/",
+                desc: "Download audio or video from any platform by pasting a link.", cat: "video" },
+            { num: 86, name: "VideoToBlog.ai", url: "https://www.videotoblog.ai/",
+                desc: "Instantly convert videos into powerful blog articles.", cat: "video" },
+            { num: 151, name: "Vozo.ai", url: "https://www.vozo.ai/", desc: "Easily create, dub, lip sync and translate videos.",
+                cat: "video" },
+            { num: 216, name: "VideoTutor", url: "https://videotutor.io/",
+                desc: "Make study animation videos by just typing a prompt.", cat: "video" },
+            { num: 45, name: "Unscreen", url: "https://www.unscreen.com/", desc: "Remove video backgrounds automatically with AI.",
+                cat: "video" },
+            { num: 431, name: "Wondershare Filmora", url: "https://filmora.wondershare.com/",
+                desc: "Popular video editing software with comprehensive AI tools.", cat: "video" },
+            { num: 434, name: "Topaz Video AI", url: "https://www.topazlabs.com/topaz-video-ai",
+                desc: "Upscale low-resolution video footage with AI.", cat: "video" },
+            { num: 1024, name: "D-ID Studio", url: "https://www.d-id.com/",
+                desc: "Produce talking head videos with realistic AI avatars.", cat: "video" },
+            { num: 1026, name: "Fliki", url: "https://fliki.ai/", desc: "Turn text into videos with natural AI voices.",
+                cat: "video" },
+            { num: 278, name: "MovieFlow", url: "https://movieflow.ai/", desc: "Make stunning movie-quality animation videos.",
+                cat: "video" },
+            { num: 150, name: "RunwayML", url: "https://runwayml.com/",
+                desc: "AI research company with Gen-2 text-to-video and creative tools.", cat: "video" },
+            { num: 168, name: "Capcut", url: "https://www.capcut.com/",
+                desc: "All-in-one video editor with AI tools and team collaboration.", cat: "video" },
+            { num: 169, name: "Captions", url: "https://www.captions.ai/",
+                desc: "AI creative studio with voice cloning and auto subtitles.", cat: "video" },
+            { num: 192, name: "Genmo AI", url: "https://alpha.genmo.ai/", desc: "Text-to-video generation with fantastical styles.",
+                cat: "video" },
+            { num: 193, name: "Generative Engine", url: "https://experiments.runwayml.com/generative_engine/",
+                desc: "RunwayML's storytelling machine that generates synthetic images from text.", cat: "video" },
+            { num: 211, name: "Pipio", url: "https://pipio.ai/", desc: "Create videos with photorealistic digital actors.",
+                cat: "video" },
+            { num: 322, name: "RunwayML Gen 2", url: "https://app.runwayml.com/login",
+                desc: "Multimodal AI system for text-to-video and image-to-video.", cat: "video" },
+            { num: 323, name: "Synthesis", url: "https://www.synthesis.io/?via=Aiwebtools",
+                desc: "AI video generation with 140+ avatars and 120+ languages.", cat: "video" },
+            { num: 324, name: "D-ID", url: "https://www.d-id.com/", desc: "Animate photos into lifelike talking avatars.",
+                cat: "video" },
+            { num: 325, name: "Colossyan", url: "https://www.colossyan.com/?via=aiwebtools",
+                desc: "AI video platform for workplace learning with avatars.", cat: "video" },
+            { num: 326, name: "Descript", url: "https://get.descript.com/u44uyqg52oxh",
+                desc: "Multimedia editing platform with transcription and screen recording.", cat: "video" },
+            { num: 327, name: "GetMunch", url: "https://www.getmunch.com/?utm_campaign=influencers&utm_medium=website&utm_source=erwardful&via=aiwebtools",
+                desc: "AI video editing that extracts engaging clips from long videos.", cat: "video" },
+            { num: 328, name: "InVideo", url: "https://invideo.sjy.io/k0kMbn",
+                desc: "Video creation tool with 5000+ templates and AI script generator.", cat: "video" },
+            { num: 329, name: "HeyGen", url: "https://app.heygen.com/guest?sid=rewardful&via=aiwebtools",
+                desc: "AI text-to-video with avatars and face swap features.", cat: "video" },
+            { num: 332, name: "DeepBrain.io", url: "https://www.deepbrain.io/ai-studios?via=aiwebtools",
+                desc: "AI video generator with photorealistic avatars.", cat: "video" },
+            { num: 333, name: "Lumen5", url: "https://lumen5.com/",
+                desc: "Video creator that turns blog posts into engaging videos.", cat: "video" },
+            { num: 337, name: "VIDYO", url: "https://vidyo.ai/", desc: "AI video editing for short clips from longer content.",
+                cat: "video" },
+            { num: 338, name: "OpusClip", url: "https://www.opus.pro/",
+                desc: "AI video clipping tool with virality score prediction.", cat: "video" },
+            { num: 339, name: "Kamua", url: "https://kamua.com/", desc: "Browser-based video editing with AI automation.",
+                cat: "video" },
+            { num: 340, name: "Dumme", url: "https://dumme.com/", desc: "Create high-impact shorts from long videos with AI.",
+                cat: "video" },
+            { num: 345, name: "VEED.IO", url: "https://www.veed.io/",
+                desc: "Online video editing with auto-subtitles and transcription.", cat: "video" },
+            { num: 347, name: "Pictory", url: "https://pictory.ai/?ref=kenneth78",
+                desc: "AI video creation from blog posts and long-form content.", cat: "video" },
+            { num: 348, name: "Waymark", url: "https://waymark.com/",
+                desc: "AI-driven video platform for TV, CTV, and digital ads.", cat: "video" },
+            { num: 364, name: "MoonValley AI", url: "https://moonvalley.ai/",
+                desc: "Text-to-video generator for cinematic and animated videos.", cat: "video" },
+            { num: 366, name: "Pika Labs", url: "https://www.pika.art/",
+                desc: "Free text-to-video and image-to-video generation.", cat: "video" },
+            { num: 375, name: "Stable Video Diffusion", url: "https://stablevideodiffusion.pro/",
+                desc: "AI-driven video generation from text and images.", cat: "video" },
+            { num: 401, name: "VideoLeap", url: "https://www.videoleapapp.com/",
+                desc: "Video editing app with AI effects and overlays.", cat: "video" },
+            { num: 402, name: "Elai.io", url: "https://elai.io/?via=aiwebtools",
+                desc: "AI video creation platform with avatars and multi-lingual voice cloning.", cat: "video" },
+            { num: 405, name: "Ghostcut", url: "https://jollytoday.com/index?redirect=%2Fhome%2Fen&code=ul051",
+                desc: "AI video editing: text removal, de-duplication, translation, dubbing.", cat: "video" },
+            { num: 407, name: "Genmo", url: "https://alpha.genmo.ai/", desc: "Fantastical video generation from text prompts.",
+                cat: "video" },
+            { num: 408, name: "FLIKI", url: "https://fliki.ai/?via=aiwebtools",
+                desc: "Turn text into videos with lifelike voiceovers and stock media.", cat: "video" },
+            { num: 410, name: "Vidyo.ai", url: "https://vidyo.ai/", desc: "AI video editing for short clips from longer videos.",
+                cat: "video" },
+            { num: 411, name: "Unscreen", url: "https://www.unscreen.com/",
+                desc: "Remove video backgrounds automatically with AI.", cat: "video" },
+            { num: 413, name: "CloneAI", url: "https://apps.apple.com/us/app/cloneai-ai-video-generator/id6444766851",
+                desc: "IOS app that turns photos and videos into artistic pieces.", cat: "video" },
+            { num: 415, name: "Steve.AI", url: "https://www.steve.ai/",
+                desc: "AI video creation from text, blogs, and audio files.", cat: "video" },
+            { num: 416, name: "Phenaki", url: "https://phenaki.video/", desc: "Text-to-video generation with long-form capabilities.",
+                cat: "video" },
+            { num: 417, name: "Papercup", url: "https://www.papercup.com/",
+                desc: "AI dubbing platform with 100+ ultra-realistic voices.", cat: "video" },
+            { num: 422, name: "Rephrase.AI", url: "https://www.rephrase.ai/",
+                desc: "Text-to-video generation with digital avatars.", cat: "video" },
+            { num: 425, name: "Visla", url: "https://www.visla.us/?gr_pk=0EmN&gr_uid=5q8A",
+                desc: "All-in-one AI video creation and editing platform.", cat: "video" },
+            { num: 427, name: "Wisecut", url: "https://www.wisecut.video/?irclickid=WtP2tcxxwyPRwR1AxWx6T7lUKFU4gTcE1NVyo0&irgwC=1",
+                desc: "AI video editing with auto silence removal and subtitles.", cat: "video" },
+            { num: 537, name: "INVIDEO", url: "https://invideo.sjy.io/k0kMbn",
+                desc: "Video creation co-pilot with 5000+ templates and AI tools.", cat: "video" },
+            { num: 912, name: "PIKA LABS", url: "https://www.pika.art/",
+                desc: "Free text-to-video generator similar to RunwayML Gen 2.", cat: "video" },
+
+            // ─── AUDIO, VOICE & MUSIC ───
+            { num: 435, name: "ElevenLabs", url: "https://elevenlabs.io/",
+                desc: "Generate ultra-realistic AI voices and clone any voice.", cat: "audio" },
+            { num: 31, name: "Suno", url: "https://suno.com/", desc: "Create original songs from text prompts with full instrumentation.",
+                cat: "audio" },
+            { num: 436, name: "Udio", url: "https://www.udio.com/", desc: "Create original studio-quality songs from text prompts.",
+                cat: "audio" },
+            { num: 437, name: "Murf AI", url: "https://murf.ai/", desc: "Generate studio-quality voiceovers in 120+ languages.",
+                cat: "audio" },
+            { num: 438, name: "AIVA", url: "https://www.aiva.ai/", desc: "Compose royalty-free background music with AI.",
+                cat: "audio" },
+            { num: 8, name: "Adobe Podcast", url: "https://podcast.adobe.com/", desc: "Enhance voice recordings to sound like a professional studio.",
+                cat: "audio" },
+            { num: 31, name: "Mubert", url: "https://mubert.com/", desc: "Render original royalty-free music with a single prompt.",
+                cat: "audio" },
+            { num: 31, name: "Soundraw", url: "https://soundraw.io/", desc: "Create customizable royalty-free music with AI.",
+                cat: "audio" },
+            { num: 37, name: "Moises.ai", url: "https://moises.ai/", desc: "Remove vocals and instruments from any song professionally.",
+                cat: "audio" },
+            { num: 440, name: "LALAL.AI", url: "https://www.lalal.ai/", desc: "Separate vocals, instruments and stems from any track.",
+                cat: "audio" },
+            { num: 441, name: "Resemble AI", url: "https://www.resemble.ai/", desc: "Build custom AI voice clones for any application.",
+                cat: "audio" },
+            { num: 442, name: "Krisp", url: "https://krisp.ai/",
+                desc: "Remove background noise from any call or recording in real-time.", cat: "audio" },
+            { num: 55, name: "VoiceMod", url: "https://www.voicemod.net/",
+                desc: "Real-time AI voice changer and soundboard for games and calls.", cat: "audio" },
+            { num: 165, name: "Play.ai", url: "https://play.ai/", desc: "Generate AI voices that sound as real as humans.",
+                cat: "audio" },
+            { num: 153, name: "Auphonic", url: "https://auphonic.com/",
+                desc: "Automatic audio post-production for podcasts and recordings.", cat: "audio" },
+            { num: 187, name: "Fish Audio", url: "https://fish.audio/",
+                desc: "Voice cloning, voice library, voice-over and text-to-speech.", cat: "audio" },
+            { num: 173, name: "Speechma", url: "https://speechma.com/", desc: "Best free text-to-audio generator online.",
+                cat: "audio" },
+            { num: 75, name: "AudioBox Meta", url: "https://audiobox.metademolab.com/",
+                desc: "Generate sound effects and voices from text descriptions.", cat: "audio" },
+            { num: 979, name: "Cleanvoice AI", url: "https://cleanvoice.ai/",
+                desc: "Automatically remove filler words from audio recordings.", cat: "audio" },
+            { num: 1010, name: "Riffusion", url: "https://www.riffusion.com/",
+                desc: "Real-time music generation using spectrogram diffusion.", cat: "audio" },
+            { num: 281, name: "Musicify.lol", url: "https://create.musicify.lol/?ref=aiwebtools",
+                desc: "AI-powered tool to create covers of favorite songs.", cat: "audio" },
+            { num: 282, name: "Overdub by Descript", url: "https://get.descript.com/u44uyqg52oxh",
+                desc: "Ultra-realistic voice cloning for text-to-speech.", cat: "audio" },
+            { num: 283, name: "Podcastle", url: "https://podcastle.ai/?ref=yywywywq",
+                desc: "AI-powered podcasting toolkit with recording and editing.", cat: "audio" },
+            { num: 284, name: "Castmagic", url: "https://get.castmagic.io/aiwebtools",
+                desc: "Turn audio content into ready-to-publish written content.", cat: "audio" },
+            { num: 285, name: "MURF AI", url: "https://murf.ai/?lmref=x8ap_g",
+                desc: "AI voice generator with 120+ voices in 20+ languages.", cat: "audio" },
+            { num: 286, name: "LALAL", url: "https://www.lalal.ai/?fp_ref=aiwebtools",
+                desc: "AI music source separation for vocals and instruments.", cat: "audio" },
+            { num: 287, name: "BEATOVEN.AI", url: "https://www.beatoven.ai/",
+                desc: "AI-generated royalty-free background music for content creators.", cat: "audio" },
+            { num: 288, name: "BeatBot", url: "https://beatbot.fm/", desc: "AI music creation tool for generating high-quality songs.",
+                cat: "audio" },
+            { num: 289, name: "Specterr", url: "https://specterr.com/?via=aiwebtools",
+                desc: "Create custom music visualizers and video content.", cat: "audio" },
+            { num: 290, name: "SoundDraw.io", url: "https://sounddraw.io/",
+                desc: "AI music creation with unlimited compositions across genres.", cat: "audio" },
+            { num: 291, name: "Mubert", url: "https://mubert.com/?via=aiwebtools",
+                desc: "AI-powered generative music for content creators and developers.", cat: "audio" },
+            { num: 292, name: "Play.HT", url: "https://www.play.ht/?via=aiwebtools",
+                desc: "Ultra-realistic text-to-speech with 800+ voices in 142 languages.", cat: "audio" },
+            { num: 293, name: "Adobe Podcast", url: "https://podcast.adobe.com/enhance",
+                desc: "Enhance voice recordings to professional studio quality.", cat: "audio" },
+            { num: 294, name: "Krisp", url: "https://krisp.ai/", desc: "AI voice clarity and meeting assistant for online calls.",
+                cat: "audio" },
+            { num: 295, name: "Boomy", url: "https://boomy.com/", desc: "Create original music and earn royalties on streaming platforms.",
+                cat: "audio" },
+            { num: 296, name: "Riffusion", url: "https://www.riffusion.com/",
+                desc: "Neural network for music generation using spectrograms.", cat: "audio" },
+            { num: 297, name: "ElevenLabs", url: "https://elevenlabs.io/",
+                desc: "Voice AI research company with realistic audio generation.", cat: "audio" },
+            { num: 298, name: "VoiceAI", url: "https://link.xsolla.com/pEkxtOJv",
+                desc: "Free real-time voice changer with AI-generated voices.", cat: "audio" },
+            { num: 299, name: "MyVocal.AI", url: "https://www.myvocal.ai/",
+                desc: "Clone your own voice in 60 seconds for singing or content.", cat: "audio" },
+            { num: 300, name: "VoiceMod", url: "https://www.voicemod.net/ai-voices/",
+                desc: "Real-time voice changer for games and communication apps.", cat: "audio" },
+            { num: 301, name: "Resemble.ai", url: "https://www.resemble.ai/",
+                desc: "Enterprise-ready generative voice AI toolkit.", cat: "audio" },
+            { num: 302, name: "Vocal Remover", url: "https://vocalremover.org/",
+                desc: "Online AI tool to remove vocals from audio files.", cat: "audio" },
+            { num: 306, name: "TexttoMusic.app", url: "https://www.texttomusic.app/",
+                desc: "Free AI tool to turn text into basic music compositions.", cat: "audio" },
+            { num: 307, name: "Musico", url: "https://musico.com/",
+                desc: "AI-driven music composition engine for copyright-free music.", cat: "audio" },
+            { num: 308, name: "Songmastr", url: "https://www.songmastr.com/",
+                desc: "AI mastering tool that matches your song to a reference track.", cat: "audio" },
+            { num: 309, name: "Google's Drum Machine", url: "https://experiments.withgoogle.com/ai/drum-machine/view/",
+                desc: "AI-powered drum machine using everyday sounds.", cat: "audio" },
+            { num: 310, name: "Google MusicLM", url: "https://aitestkitchen.withgoogle.com/experiments/music-lm",
+                desc: "AI that transforms text descriptions into music.", cat: "audio" },
+            { num: 311, name: "WavTool", url: "https://wavtool.com/",
+                desc: "AI-powered music creation suite in your browser.", cat: "audio" },
+            { num: 312, name: "X-Minus.pro", url: "https://x-minus.pro/ai",
+                desc: "Remove vocals from songs and split tracks into stems.", cat: "audio" },
+            { num: 313, name: "Loudly", url: "https://www.loudly.com/",
+                desc: "AI music creation platform with royalty-free content.", cat: "audio" },
+            { num: 314, name: "Databass AI", url: "https://databass.ai/",
+                desc: "AI audio tools: text-to-audio, stem splitter, vocal styling.", cat: "audio" },
+            { num: 315, name: "Cleanvoice.ai", url: "https://cleanvoice.ai/",
+                desc: "Remove filler sounds, stuttering, and mouth noises from audio.", cat: "audio" },
+            { num: 317, name: "Wondercraft", url: "https://www.wondercraft.ai/?via=aiwebtools",
+                desc: "AI-powered podcast creation with hyper-realistic voices.", cat: "audio" },
+            { num: 319, name: "Uberduck.ai", url: "https://www.uberduck.ai/",
+                desc: "AI music creation with synthetic singing and rapping vocals.", cat: "audio" },
+            { num: 320, name: "TuneReel", url: "https://tunereel.com/?gr_pk=R2mj&gr_uid=5q8A",
+                desc: "Royalty-free music library and custom production music.", cat: "audio" },
+            { num: 321, name: "Listnr", url: "https://listnr.ai/?gr_pk=0EXO&gr_uid=5q8A",
+                desc: "AI voiceovers with 900+ voices in 142 languages.", cat: "audio" },
+            { num: 455, name: "Speechify", url: "https://speechify.com/?source=fb-for-mobile&via=Aiwetbooks",
+                desc: "Text-to-speech app with high-quality voices including celebrities.", cat: "audio" },
+            { num: 457, name: "Well Said Labs", url: "https://wellsaidlabs.com/",
+                desc: "AI voice platform for enterprise text-to-speech.", cat: "audio" },
+            { num: 459, name: "MURF", url: "https://get.murf.ai/1uvb0e8dznua",
+                desc: "AI voice generator with 120+ voices and studio-quality output.", cat: "audio" },
+            { num: 461, name: "LOVO.ai", url: "https://lovo.ai/",
+                desc: "AI voice generator with 500+ voices and 100 languages.", cat: "audio" },
+            { num: 462, name: "HypeFury", url: "https://hypefury.com/?via=aiwebtools",
+                desc: "Twitter growth and monetization platform with AI features.", cat: "audio" },
+            { num: 466, name: "Verbatik", url: "https://tts.verbatik.com/?ref=BZ8TCAU4H06UIEO",
+                desc: "AI text-to-speech with 600+ voices in 142 languages.", cat: "audio" },
+            { num: 467, name: "Listnr", url: "https://www.listnr.tech/?gr_pk=0EXO&gr_uid=5q8A",
+                desc: "AI text-to-speech with 900+ voices and video creation.", cat: "audio" },
+            { num: 862, name: "Unreal Speech", url: "https://unrealspeech.com/",
+                desc: "Cost-effective AI text-to-speech with studio-quality voiceovers.", cat: "audio" },
+            { num: 900, name: "Harmonai", url: "https://www.harmonai.org/",
+                desc: "Open-source AI music tool for generative audio and sound libraries.", cat: "audio" },
+            { num: 932, name: "Voice Controlla", url: "https://voice.controlla.xyz/",
+                desc: "Train your own AI singing voice and create cover songs.", cat: "audio" },
+
+            // ─── WRITING & CONTENT ───
+            { num: 445, name: "Grammarly", url: "https://www.grammarly.com/",
+                desc: "AI writing assistant for grammar, clarity and style.", cat: "writing" },
+            { num: 446, name: "QuillBot", url: "https://quillbot.com/", desc: "Paraphrase, summarize and improve any text with AI.",
+                cat: "writing" },
+            { num: 443, name: "Jasper", url: "https://www.jasper.ai/", desc: "AI copywriting platform built for marketing teams.",
+                cat: "writing" },
+            { num: 444, name: "Copy.ai", url: "https://www.copy.ai/", desc: "Generate marketing copy, emails and blog posts quickly.",
+                cat: "writing" },
+            { num: 447, name: "Sudowrite", url: "https://www.sudowrite.com/",
+                desc: "AI writing partner designed specifically for fiction writers.", cat: "writing" },
+            { num: 448, name: "Notion AI", url: "https://www.notion.com/product/ai",
+                desc: "AI writing and summarization features inside Notion.", cat: "writing" },
+            { num: 449, name: "Wordtune", url: "https://www.wordtune.com/",
+                desc: "Rewrite and rephrase any sentence with smart AI suggestions.", cat: "writing" },
+            { num: 450, name: "Hemingway Editor", url: "https://hemingwayapp.com/",
+                desc: "Analyze and simplify your writing for maximum clarity.", cat: "writing" },
+            { num: 43, name: "WriteHuman", url: "https://writehuman.ai/", desc: "Transform AI-generated text into natural human writing.",
+                cat: "writing" },
+            { num: 68, name: "BypassGPT", url: "https://www.bypassgpt.ai/", desc: "Convert AI text into undetectable human-like content.",
+                cat: "writing" },
+            { num: 113, name: "Twixify", url: "https://www.twixify.com/", desc: "Humanize AI text and match any writing style.",
+                cat: "writing" },
+            { num: 162, name: "GPTZero", url: "https://gptzero.me/", desc: "World's most accurate AI-generated content detector.",
+                cat: "writing" },
+            { num: 451, name: "Originality.ai", url: "https://originality.ai/",
+                desc: "Detect AI-generated content and check for plagiarism.", cat: "writing" },
+            { num: 978, name: "Writesonic", url: "https://writesonic.com/",
+                desc: "Best AI writer and paraphrasing tool for all content types.", cat: "writing" },
+            { num: 20, name: "BookWitch", url: "https://bookwitch.io/", desc: "Streamline your book writing with AI assistance.",
+                cat: "writing" },
+            { num: 16, name: "Rezi AI", url: "https://www.rezi.ai/", desc: "Automate every step of resume and cover letter creation.",
+                cat: "writing" },
+            { num: 230, name: "FlowCV", url: "https://flowcv.com/", desc: "Build a beautiful resume for free with smart templates.",
+                cat: "writing" },
+            { num: 203, name: "Documator", url: "https://documator.cc/", desc: "Best AI documents summarizer — instant insights from any file.",
+                cat: "writing" },
+            { num: 254, name: "AutoNotes", url: "https://autonotes.ai/",
+                desc: "Turn voice or text into structured SOAP notes in 10 seconds.", cat: "writing" },
+            { num: 976, name: "WordAI", url: "https://wordai.com/", desc: "Advanced AI text rewriter for bulk content creation.",
+                cat: "writing" },
+            { num: 453, name: "Simplified", url: "https://simplified.com/", desc: "All-in-one AI writing and design platform.",
+                cat: "writing" },
+            { num: 46, name: "AtOnce", url: "https://atonce.com/?fpr=aiwebtools",
+                desc: "SEO content creation tool with 1.7 billion articles trained.", cat: "writing" },
+            { num: 47, name: "AI Intern", url: "https://aiintern.io/",
+                desc: "ChatGPT-powered personal assistant for research and content.", cat: "writing" },
+            { num: 48, name: "Bertha AI", url: "https://bertha.ai/?ref=12713",
+                desc: "AI co-pilot for WordPress, Shopify, and Chrome.", cat: "writing" },
+            { num: 49, name: "BooksAI.app", url: "https://booksai.app/",
+                desc: "AI-generated book summaries and recommendations.", cat: "writing" },
+            { num: 50, name: "ChatronAI", url: "https://chatronai.com/?ref=i97f664587e6d4c7c3",
+                desc: "AI content generator for blogs, ads, emails and websites.", cat: "writing" },
+            { num: 51, name: "ChatDOC", url: "https://chatdoc.com/",
+                desc: "ChatGPT-powered file reader for PDFs, Word, and scanned docs.", cat: "writing" },
+            { num: 52, name: "Citation Machine", url: "https://www.citationmachine.net/",
+                desc: "Create citations and check for plagiarism and grammar.", cat: "writing" },
+            { num: 53, name: "Compose AI", url: "https://affiliate.notion.so/composeai-notion-aiwebtools",
+                desc: "Chrome extension that automates typing and boosts writing speed.", cat: "writing" },
+            { num: 54, name: "ContentBot", url: "https://contentbot.ai/?fp=aiwebtools",
+                desc: "AI-powered content automation for blogs, tweets, and more.", cat: "writing" },
+            { num: 55, name: "Content at Scale", url: "https://contentatscale.ai/",
+                desc: "AI writer for long-form research-backed content.", cat: "writing" },
+            { num: 56, name: "Copy.AI", url: "https://www.copy.ai/?via=aiwebtools",
+                desc: "AI platform for content generation and task automation.", cat: "writing" },
+            { num: 57, name: "CopyMatic", url: "https://copymatic.ai/?via=aiwebtools",
+                desc: "AI content writer with 80+ tools and SEO optimization.", cat: "writing" },
+            { num: 58, name: "CopyGenius", url: "https://copygenius.io/?ref=aiwebtools",
+                desc: "AI-powered writing tool with templates for various content types.", cat: "writing" },
+            { num: 59, name: "Copy Shark", url: "https://www.copyshark.ai/?via=aiwebtools",
+                desc: "AI copywriting tool with 50+ tools for ad and product copy.", cat: "writing" },
+            { num: 60, name: "CopySmith", url: "https://copysmith.ai/#a_aid=Aiwebtools&a_bid=1b7f753b",
+                desc: "AI for eCommerce content teams — product descriptions and SEO.", cat: "writing" },
+            { num: 61, name: "CrawlQ", url: "https://app.crawlq.ai/sign-up?get=aiwebtools",
+                desc: "AI content creation platform with customer persona research.", cat: "writing" },
+            { num: 62, name: "Creator.ai", url: "https://www.creator.ai/?ref=aiwebtools",
+                desc: "Generate personalized content quickly with AI Assistants.", cat: "writing" },
+            { num: 63, name: "Creatosaurus", url: "https://www.creatosaurus.io/signup?invitationCode=645865fafd91ccf71c9cb004",
+                desc: "Creative toolkit with graphic design templates and stock assets.", cat: "writing" },
+            { num: 64, name: "DeepBeat", url: "https://deepbeat.org/",
+                desc: "AI-powered songwriting tool for crafting compelling lyrics.", cat: "writing" },
+            { num: 66, name: "Designrr", url: "https://go2.designrr.io/wordgenie2?affiliate=aiwebtools",
+                desc: "Create ebooks and lead magnets from existing content.", cat: "writing" },
+            { num: 71, name: "Easy-Peasy AI", url: "https://easy-peasy.ai/?via=Aiwebtools",
+                desc: "AI content generator with 90+ templates and audio transcription.", cat: "writing" },
+            { num: 79, name: "Conch AI", url: "https://getconch.ai/signup?referredBy=U2FsdGVkX1+Zie/6/wvCa1DErJ5ZB1w55bJkdQ/POpY=",
+                desc: "AI writing tool with in-text citations and style improvement.", cat: "writing" },
+            { num: 80, name: "Gerwin AI", url: "https://gerwin.io/",
+                desc: "AI content creation for entrepreneurs, copywriters, and agencies.", cat: "writing" },
+            { num: 81, name: "GoCharlie AI", url: "https://gocharlie.ai/?fpr=aiwebtools",
+                desc: "AI content creation platform with 70+ tools for marketers.", cat: "writing" },
+            { num: 82, name: "Grammarly", url: "https://app.grammarly.com/?transaction_id=102349cb324b4d773be4f493acecbd&affiliateNetwork=ho&affiliateID=117841&utm_source=program",
+                desc: "AI-powered grammar and spell checker for all writing.", cat: "writing" },
+            { num: 83, name: "Headlime", url: "https://headlime.com/?invite=dMHLwAnzVlWNw7QLUNXLbp67VVI2",
+                desc: "AI content creation for marketing copy with GPT-3.", cat: "writing" },
+            { num: 84, name: "Friday", url: "https://www.heyfriday.ai/home",
+                desc: "AI content writing tool with 40+ templates and multiple iterations.", cat: "writing" },
+            { num: 85, name: "Hoppy Copy", url: "https://www.hoppycopy.co/?via=Aiwebtools",
+                desc: "AI email marketing tool with 50+ templates and spam checker.", cat: "writing" },
+            { num: 87, name: "INK", url: "https://inkforall.com/?fpr=aiwebtools",
+                desc: "AI content marketing suite with keyword research and SEO.", cat: "writing" },
+            { num: 88, name: "Jasper AI", url: "https://www.jasper.ai/?utm_source=partner&fpr=aiwebtools",
+                desc: "AI content creation with brand voice and SEO optimization.", cat: "writing" },
+            { num: 89, name: "Jenni AI", url: "https://jenni.ai/",
+                desc: "AI research paper writing with autocomplete and citations.", cat: "writing" },
+            { num: 90, name: "Kafkai", url: "https://kafkai.com/en/?via=aiwebtools",
+                desc: "AI article generator for SEO-friendly blog and website content.", cat: "writing" },
+            { num: 91, name: "Kick Resume", url: "https://www.kickresume.com/en/",
+                desc: "AI resume builder with GPT-4 and customizable templates.", cat: "writing" },
+            { num: 92, name: "Linguix", url: "https://shareasale.com/r.cfm?b=2145856&u=3604681&m=131006&urllink=&afftrack=",
+                desc: "AI grammar and writing assistant with multilingual support.", cat: "writing" },
+            { num: 93, name: "Longshot AI", url: "https://www.longshot.ai/?deal=aiwebtools",
+                desc: "Fact-checked AI content generation with citations.", cat: "writing" },
+            { num: 94, name: "MakeMyTale", url: "https://makemytale.com/",
+                desc: "AI-powered story creator for children's stories.", cat: "writing" },
+            { num: 96, name: "Multilings", url: "https://multilings.com/?via=uiex10twa5amrgvibz5",
+                desc: "AI suite for translation, content writing, plagiarism checking.", cat: "writing" },
+            { num: 97, name: "Nando AI Chat", url: "https://nando.ai/?ref=zyi3yje",
+                desc: "GPT-4 powered copywriting tool for e-commerce and social media.", cat: "writing" },
+            { num: 98, name: "Alispiration", url: "https://alispiration.netlify.app/",
+                desc: "AI writing tool for authors with character and setting descriptions.", cat: "writing" },
+            { num: 99, name: "Neuraltext", url: "https://www.neuraltext.com/?via=aiwebtools",
+                desc: "AI content marketing platform with SEO and keyword discovery.", cat: "writing" },
+            { num: 100, name: "NOTION AI", url: "https://affiliate.notion.so/aiwebtools",
+                desc: "AI writing and summarization tool integrated into Notion.", cat: "writing" },
+            { num: 101, name: "OnceUponABot", url: "https://onceuponabot.com/",
+                desc: "AI children's story generator with GPT-3 and Stable Diffusion.", cat: "writing" },
+            { num: 102, name: "Orchard.ink", url: "https://www.orchard.ink/",
+                desc: "GPT text editor with multiplayer collaboration and smart suggestions.", cat: "writing" },
+            { num: 103, name: "ParagraphAI", url: "https://paragraphai.com/?ref=aiwebtools",
+                desc: "AI writing assistant for emails, reports, resumes and more.", cat: "writing" },
+            { num: 104, name: "PaperPal", url: "https://paperpal.com/homev2",
+                desc: "AI writing assistant for academic research papers.", cat: "writing" },
+            { num: 105, name: "PolitePost", url: "https://politepost.net/",
+                desc: "AI tool that refines emails to be professional and polite.", cat: "writing" },
+            { num: 107, name: "Resumaker.ai", url: "https://resumaker.ai/",
+                desc: "AI resume builder with company-approved templates.", cat: "writing" },
+            { num: 108, name: "REZI", url: "https://www.rezi.ai/?via=aiwebtools",
+                desc: "AI resume builder with ATS keyword targeting and scoring.", cat: "writing" },
+            { num: 109, name: "Ryt", url: "https://rytr.me/?via=aiwebtools",
+                desc: "AI writing assistant for taglines, headlines and content.", cat: "writing" },
+            { num: 110, name: "Samwell.ai", url: "https://samwell.ai/",
+                desc: "AI writing assistant for essays with citations and audio summaries.", cat: "writing" },
+            { num: 112, name: "ScripAI", url: "https://scripai.com/ai-tools",
+                desc: "AI tools for social media, copywriting, SEO and blogging.", cat: "writing" },
+            { num: 113, name: "Shakespeare", url: "https://www.shakespeare.ai/lp/start-for-free/?fpr=kenneth45",
+                desc: "AI content creation for e-commerce, SEO, and social media.", cat: "writing" },
+            { num: 115, name: "Sheeter", url: "https://sheeter.ai/",
+                desc: "AI Excel formula generator for spreadsheets.", cat: "writing" },
+            { num: 116, name: "ShortlyAI", url: "https://shortlyai.com?fp_ref=aiwebtools",
+                desc: "AI writing tool for content creators and bloggers.", cat: "writing" },
+            { num: 117, name: "SimilarContent", url: "https://shareasale.com/r.cfm?b=1869923&u=3604681&m=116762&urllink=&afftrack=",
+                desc: "NLP-powered SEO content writing with GPT-3.", cat: "writing" },
+            { num: 118, name: "Simplified", url: "https://simplified.com/?fpr=kenneth81",
+                desc: "All-in-one AI platform for design, video, copywriting, social media.", cat: "writing" },
+            { num: 120, name: "Smartwriter.ai", url: "https://www.smartwriter.ai/",
+                desc: "AI email outreach and content creation for B2B sales.", cat: "writing" },
+            { num: 121, name: "SpeedWrite", url: "https://speedwrite.com/?via=aiwebtools",
+                desc: "AI text rewriter that creates unique content from any source.", cat: "writing" },
+            { num: 123, name: "Story Lab AI", url: "https://storylab.ai/?ref=aiwebtools",
+                desc: "AI content marketing toolkit for brands and marketers.", cat: "writing" },
+            { num: 125, name: "SudoWrite", url: "https://www.sudowrite.com/?via=aiwebtools",
+                desc: "AI writing partner for novelists and creative writers.", cat: "writing" },
+            { num: 127, name: "TealHQ", url: "https://www.tealhq.com/tools/resume-builder",
+                desc: "AI resume builder with real-time feedback and matching.", cat: "writing" },
+            { num: 128, name: "TextCortex", url: "https://textcortex.com/?via=aiwebtools",
+                desc: "AI writing assistant with customizable AI companions.", cat: "writing" },
+            { num: 129, name: "TEXTA", url: "https://texta.ai/home?via=aiwebtools",
+                desc: "AI content creation platform for blogs, emails and SEO.", cat: "writing" },
+            { num: 130, name: "Text-Generator", url: "https://text-gen.com/",
+                desc: "Open-source AI assistant for Obsidian knowledge creation.", cat: "writing" },
+            { num: 132, name: "Type.ai", url: "https://type.ai/", desc: "AI-powered document editor for faster writing.", cat: "writing" },
+            { num: 133, name: "WordTune", url: "https://app.wordtune.com/account/signup?product=write&platform=editor&redirect=https://app.wordtune.com/v2/editor",
+                desc: "AI writing assistant for rephrasing and grammar correction.", cat: "writing" },
+            { num: 134, name: "Word AI", url: "https://wordai.com/?ref=ca732c",
+                desc: "AI content rewriter that passes AI detectors.", cat: "writing" },
+            { num: 135, name: "WriteSonic", url: "https://writesonic.com/?via=aiwebtools",
+                desc: "AI content platform for text, audio, images, and chatbots.", cat: "writing" },
+            { num: 136, name: "Writefull", url: "https://www.writefull.com/",
+                desc: "AI writing assistant for academic and technical writing.", cat: "writing" },
+            { num: 137, name: "Yaara", url: "https://www.yaara.ai/?via=aiwebtools",
+                desc: "AI writing tool for blogs, SEO, and email communication.", cat: "writing" },
+            { num: 138, name: "Article Forge", url: "https://www.articleforge.com/",
+                desc: "AI content creation tool that generates SEO-optimized articles.", cat: "writing" },
+            { num: 140, name: "WriteSeed", url: "https://writeseed.com/?v=6222",
+                desc: "AI writing tool that generates full articles quickly.", cat: "writing" },
+            { num: 142, name: "MagickPen", url: "https://magickpen.com/?aff=DM2Np",
+                desc: "AI writing assistant with GPT-3.5 and GPT-4 options.", cat: "writing" },
+            { num: 499, name: "CopyGenius", url: "https://copygenius.io/?ref=aiwebtools",
+                desc: "AI writing tool with templates and Genius Editor for content creation.", cat: "writing" },
+            { num: 772, name: "AnswerThePublic", url: "https://answerthepublic.com/",
+                desc: "Search listening tool that reveals what people are searching for.", cat: "writing" },
+            { num: 879, name: "Typli Writing Assistant", url: "https://typli.ai/?ref=aiwebtools",
+                desc: "AI writing assistant for SEO-optimized blog articles and content.", cat: "writing" },
+            { num: 901, name: "Paraphrase Tool", url: "https://paraphrasetool.com/?via=Aiwebtools",
+                desc: "AI-powered paraphrasing tool for rephrasing text.", cat: "writing" },
+            { num: 902, name: "WordFixer Bot", url: "https://www.wordfixerbot.com/",
+                desc: "AI-driven text refinement and revision tool.", cat: "writing" },
+            { num: 903, name: "Writely AI", url: "https://www.writelyai.com?fpr=aiwebtools",
+                desc: "AI writing assistant for articles, emails, and stories.", cat: "writing" },
+
+            // ─── RESEARCH & LEARNING ───
+            { num: 2, name: "Summarize.ing", url: "https://summarize.ing/", desc: "Get YouTube video summaries in under a minute.",
+                cat: "research" },
+            { num: 7, name: "PDF GPT", url: "https://www.pdfgpt.io/", desc: "Get instant answers from research papers and legal docs.",
+                cat: "research" },
+            { num: 73, name: "SciSpace", url: "https://scispace.com/", desc: "All-in-one AI tools for students and researchers.",
+                cat: "research" },
+            { num: 95, name: "TurboLearn", url: "https://www.turbolearn.ai/",
+                desc: "Convert any audio, video or PDF into instant notes and quizzes.", cat: "research" },
+            { num: 118, name: "NotebookLM", url: "https://notebooklm.google.com/",
+                desc: "Google's AI research and thinking partner for your notes.", cat: "research" },
+            { num: 143, name: "Stanford STORM", url: "https://storm.genie.stanford.edu/",
+                desc: "Research prototype for interactive knowledge curation.", cat: "research" },
+            { num: 144, name: "Consensus", url: "https://consensus.app/",
+                desc: "AI-powered research platform that searches academic papers.", cat: "research" },
+            { num: 454, name: "Elicit", url: "https://elicit.com/", desc: "AI research assistant for finding and analyzing papers.",
+                cat: "research" },
+            { num: 458, name: "ResearchRabbit", url: "https://www.researchrabbit.ai/",
+                desc: "Discover connected academic papers and build research maps.", cat: "research" },
+            { num: 459, name: "Explainpaper", url: "https://www.explainpaper.com/",
+                desc: "Get AI explanations of complex research paper sections.", cat: "research" },
+            { num: 109, name: "NoteGPT", url: "https://notegpt.io/",
+                desc: "Summarize YouTube videos, PDFs and web articles instantly.", cat: "research" },
+            { num: 130, name: "Mapify", url: "https://mapify.so/", desc: "Summarize YouTube videos and PDFs into mind maps.",
+                cat: "research" },
+            { num: 111, name: "Humata AI", url: "https://www.humata.ai/", desc: "Ask questions across all your files simultaneously.",
+                cat: "research" },
+            { num: 119, name: "YouLearn", url: "https://www.youlearn.ai/",
+                desc: "Turn your learning materials into notes, quizzes and more.", cat: "research" },
+            { num: 148, name: "Coconote", url: "https://coconote.app/",
+                desc: "Instantly turn audio, video and PDFs into organized notes.", cat: "research" },
+            { num: 107, name: "MLU Explain", url: "https://mlu-explain.github.io/",
+                desc: "Visual explanations of core machine learning concepts.", cat: "research" },
+            { num: 108, name: "Julius AI", url: "https://julius.ai/", desc: "Connect your data and ask questions in plain English.",
+                cat: "research" },
+            { num: 455, name: "Khanmigo", url: "https://www.khanacademy.org/khan-labs",
+                desc: "Khan Academy's AI tutor for personalized learning.", cat: "research" },
+            { num: 456, name: "Quizlet AI", url: "https://quizlet.com/",
+                desc: "Generate flashcards, tests and study guides automatically.", cat: "research" },
+            { num: 457, name: "Otter.ai", url: "https://otter.ai/",
+                desc: "Transcribe meetings, lectures and calls automatically.", cat: "research" },
+            { num: 214, name: "Class Central", url: "https://www.classcentral.com/",
+                desc: "Free online courses from the world's best universities.", cat: "research" },
+            { num: 242, name: "PhET Simulations", url: "https://phet.colorado.edu/",
+                desc: "Learn science through interactive animations.", cat: "research" },
+            { num: 88, name: "AnswerThePublic", url: "https://answerthepublic.com/",
+                desc: "See every question people are searching about any topic.", cat: "research" },
+            { num: 461, name: "Wisdolia", url: "https://www.wisdolia.com/",
+                desc: "Generate flashcards automatically from any content.", cat: "research" },
+            { num: 72, name: "Elicit", url: "https://elicit.com/",
+                desc: "AI research assistant that automates paper summarization.", cat: "research" },
+            { num: 111, name: "Scite", url: "https://shareasale.com/r.cfm?b=1818163&u=3604681&m=113325&urlink=&afftrack=",
+                desc: "AI platform for scientific article citations and credibility.", cat: "research" },
+            { num: 247, name: "Socratic", url: "https://socratic.org/",
+                desc: "Educational app with visual explanations powered by Google AI.", cat: "research" },
+            { num: 518, name: "Teachermatic", url: "https://teachermatic.com/ref/6715",
+                desc: "AI platform for teachers to create lesson plans and resources.", cat: "research" },
+            { num: 527, name: "SpeakAI", url: "https://speakai.co/?via=aiwebtoolss",
+                desc: "Turn language data into insights with transcription and analysis.", cat: "research" },
+            { num: 528, name: "Otter.ai", url: "https://otter.ai/",
+                desc: "AI meeting assistant with real-time transcription and summaries.", cat: "research" },
+            { num: 531, name: "You-TLDR", url: "https://www.you-tldr.com/",
+                desc: "Quick summaries of YouTube videos in your preferred language.", cat: "research" },
+            { num: 532, name: "Rewind.AI", url: "https://www.rewind.ai/",
+                desc: "Personal AI assistant that captures and stores your screen and audio.", cat: "research" },
+            { num: 533, name: "REV", url: "https://rev.pxf.io/c/4110048/1357141/16349",
+                desc: "Transcription and speech-to-text services for audio and video.", cat: "research" },
+            { num: 535, name: "TL;DV", url: "https://tldv.cello.so/ig6MHPWb7Od",
+                desc: "Record, transcribe, and summarize Zoom and Google Meet calls.", cat: "research" },
+            { num: 536, name: "Traq.ai", url: "https://www.traq.ai/",
+                desc: "AI conversation intelligence for sales calls and insights.", cat: "research" },
+            { num: 543, name: "Scribbr", url: "https://www.scribbr.com/paraphrasing-tool/",
+                desc: "AI paraphrasing tool and plagiarism checker for academics.", cat: "research" },
+            { num: 551, name: "LitGrades", url: "https://litgrades.com/",
+                desc: "AI-powered flashcards for efficient studying and memorization.", cat: "research" },
+            { num: 552, name: "Brain-Buddy", url: "https://brain-buddy.com/",
+                desc: "AI educational platform for learning, problem-solving, and test prep.", cat: "research" },
+            { num: 553, name: "Monic.ai", url: "https://monic.ai/?via=aiwebtools",
+                desc: "AI-powered learning platform with interactive resources and assessments.", cat: "research" },
+            { num: 557, name: "NOLEJ.io", url: "https://nolej.io/",
+                desc: "AI platform that transforms learning materials into interactive content.", cat: "research" },
+            { num: 559, name: "Alison", url: "https://alison.com/?utm_source=alison_user&utm_medium=affiliates&utm_campaign=34459882",
+                desc: "Free online learning platform with 4,000+ courses.", cat: "research" },
+            { num: 562, name: "K-12 Homework Helper", url: "https://youai.ai/ais/k12-homework-helper-4d2fdec",
+                desc: "AI homework helper for K-12 students across all subjects.", cat: "research" },
+            { num: 563, name: "Wolfram Alpha", url: "https://www.wolframalpha.com/",
+                desc: "Computational knowledge engine for math, science, and history.", cat: "research" },
+            { num: 579, name: "Youper", url: "https://www.youper.ai/",
+                desc: "AI mental health chatbot with clinically validated therapy.", cat: "research" },
+            { num: 585, name: "Basmo", url: "https://basmo.app/",
+                desc: "AI-powered reading companion for books and literature.", cat: "research" },
+            { num: 586, name: "WiseOne.io", url: "https://wiseone.io/",
+                desc: "AI reading assistant that provides reliable information and summaries.", cat: "research" },
+            { num: 590, name: "ElsaSpeak", url: "https://elsaspeak.com/en/",
+                desc: "AI English language learning with pronunciation feedback.", cat: "research" },
+            { num: 636, name: "Glasp", url: "https://glasp.co/",
+                desc: "Web highlighter and note-taking tool with AI summaries.", cat: "research" },
+            { num: 804, name: "Humata", url: "https://www.humata.ai/?via=Aiwebtools",
+                desc: "AI tool for research, document analysis, and learning acceleration.", cat: "research" },
+            { num: 849, name: "ResearchStudio", url: "https://researchstudio.ai/",
+                desc: "AI research analysis with summarization and sentiment evaluation.", cat: "research" },
+            { num: 918, name: "Learning Studio AI", url: "https://learningstudioai.com/?via=aiwebtools",
+                desc: "AI course creation tool for educators and trainers.", cat: "research" },
+            { num: 919, name: "Mini Course Generator", url: "https://minicoursegenerator.com/",
+                desc: "Create mini-courses with AI assistance and interactive elements.", cat: "research" },
+            { num: 920, name: "CourseBox AI", url: "https://www.coursebox.ai/?ref=fj24a4of",
+                desc: "AI course creation platform that drafts courses in under an hour.", cat: "research" },
+            { num: 921, name: "GetLearnery", url: "https://getlearnery.com/",
+                desc: "Personalized AI course generator for accelerated learning.", cat: "research" },
+
+            // ─── CODING & DEVELOPMENT ───
+            { num: 462, name: "GitHub Copilot", url: "https://github.com/features/copilot",
+                desc: "AI pair programmer that suggests code in real-time.", cat: "coding" },
+            { num: 463, name: "Cursor", url: "https://cursor.com/", desc: "AI-first code editor that understands your codebase.",
+                cat: "coding" },
+            { num: 464, name: "Replit", url: "https://replit.com/", desc: "Cloud coding platform with built-in AI assistance.",
+                cat: "coding" },
+            { num: 465, name: "Codeium", url: "https://codeium.com/", desc: "Free AI code completion for 70+ programming languages.",
+                cat: "coding" },
+            { num: 466, name: "v0 by Vercel", url: "https://v0.dev/",
+                desc: "Generate production-ready React UI components from prompts.", cat: "coding" },
+            { num: 467, name: "Bolt.new", url: "https://bolt.new/", desc: "Build and deploy full-stack web apps with AI instantly.",
+                cat: "coding" },
+            { num: 468, name: "Lovable", url: "https://lovable.dev/", desc: "Turn natural language descriptions into working web apps.",
+                cat: "coding" },
+            { num: 470, name: "Warp", url: "https://www.warp.dev/", desc: "AI-powered terminal with natural language command input.",
+                cat: "coding" },
+            { num: 471, name: "Sourcegraph Cody", url: "https://sourcegraph.com/cody",
+                desc: "AI coding assistant trained on your entire codebase.", cat: "coding" },
+            { num: 472, name: "Mintlify", url: "https://mintlify.com/",
+                desc: "Generate beautiful documentation directly from your codebase.", cat: "coding" },
+            { num: "C1", name: "CodeCrafters", url: "https://codecrafters.io/",
+                desc: "Practice writing complex software — recreate Redis, Git, Docker.", cat: "coding" },
+            { num: "C3", name: "Tabnine", url: "https://www.tabnine.com/", desc: "Privacy-focused AI code completion tool.",
+                cat: "coding" },
+            { num: 154, name: "Carbon", url: "https://carbon.now.sh/", desc: "Create beautiful images of your source code to share.",
+                cat: "coding" },
+            { num: 237, name: "Ray.so", url: "https://www.ray.so/", desc: "Create beautiful shareable images of your code.",
+                cat: "coding" },
+            { num: 164, name: "AppsGeyser", url: "https://appsgeyser.com/", desc: "No-code app builder — turn any website into an app.",
+                cat: "coding" },
+            { num: 197, name: "Netlify", url: "https://www.netlify.com/", desc: "Deploy any modern frontend stack with one click.",
+                cat: "coding" },
+            { num: 185, name: "Coddy.tech", url: "https://coddy.tech/",
+                desc: "Learn any programming language through interactive challenges.", cat: "coding" },
+            { num: 224, name: "QuickRef", url: "https://quickref.me/",
+                desc: "Find quick cheat sheets for every programming language.", cat: "coding" },
+            { num: 469, name: "Postman AI", url: "https://www.postman.com/",
+                desc: "API development and testing with AI assistance.", cat: "coding" },
+            { num: 253, name: "Codia.ai", url: "https://codia.ai/", desc: "Anything to design, and anything to code — AI powered.",
+                cat: "coding" },
+            { num: 709, name: "FlutterFlow", url: "https://flutterflow.io/?referral_id=RyOuuGrexBa2Wy88ft56vrhqzF12",
+                desc: "Visual app builder with 80+ Flutter widgets and Firebase integration.", cat: "coding" },
+            { num: 710, name: "BlackBox", url: "https://www.useblackbox.io/",
+                desc: "AI coding assistant with autocomplete, code chat, and autocommit.", cat: "coding" },
+            { num: 711, name: "Bubble", url: "https://bubble.io/",
+                desc: "No-code platform for building web applications and dashboards.", cat: "coding" },
+            { num: 712, name: "Uizard", url: "https://get.uizard.io/aff_c?offer_id=3&aff_id=109",
+                desc: "AI design tool that turns sketches and prompts into UI designs.", cat: "coding" },
+            { num: 713, name: "Galileo AI", url: "https://www.usegalileo.ai/",
+                desc: "Instant UI design from natural language prompts.", cat: "coding" },
+            { num: 716, name: "CodeGeeX", url: "https://huggingface.co/spaces/THUDM/CodeGeeX",
+                desc: "Large-scale multilingual code generation model with 13B parameters.", cat: "coding" },
+            { num: 730, name: "CodeSquire", url: "https://codesquire.ai/",
+                desc: "AI code writing assistant for data scientists and engineers.", cat: "coding" },
+            { num: 734, name: "MutableAI", url: "https://mutable.ai/",
+                desc: "AI-driven software development with autocomplete and test generation.", cat: "coding" },
+            { num: 735, name: "AI Code Mentor", url: "https://code-mentor.ai/",
+                desc: "AI tool that explains code with different explanation styles.", cat: "coding" },
+            { num: 737, name: "Replit", url: "https://replit.com/site/ghostwriter",
+                desc: "In-IDE developer AI chat with Ghostwriter.", cat: "coding" },
+            { num: 738, name: "Tabnine", url: "https://www.tabnine.com/",
+                desc: "AI coding assistant with private code completion.", cat: "coding" },
+            { num: 739, name: "Debuild", url: "https://debuild.app/",
+                desc: "AI-powered low-code tool for rapid web app development.", cat: "coding" },
+            { num: 877, name: "Codeium", url: "https://codeium.com/",
+                desc: "AI coding companion with autocomplete and intelligent code search.", cat: "coding" },
+            { num: 878, name: "Github Copilot", url: "https://github.com/features/copilot",
+                desc: "AI pair programmer that suggests code in real-time.", cat: "coding" },
+
+            // ─── PRESENTATIONS & DESIGN ───
+            { num: 13, name: "Gamma", url: "https://gamma.app/", desc: "AI design partner for effortless, beautiful presentations.",
+                cat: "presentations" },
+            { num: 473, name: "Beautiful.ai", url: "https://www.beautiful.ai/",
+                desc: "Presentation software with smart AI design assistance.", cat: "presentations" },
+            { num: 474, name: "Tome", url: "https://tome.app/", desc: "Generate full slide decks from simple text prompts.",
+                cat: "presentations" },
+            { num: 123, name: "Prezi", url: "https://prezi.com/", desc: "Create dynamic, zoomable presentations that stand out.",
+                cat: "presentations" },
+            { num: 168, name: "Presentations.ai", url: "https://www.presentations.ai/",
+                desc: "ChatGPT for presentations — generate slides instantly.", cat: "presentations" },
+            { num: 188, name: "MagicSlides", url: "https://www.magicslides.app/",
+                desc: "Best AI presentation maker from any text or topic.", cat: "presentations" },
+            { num: 475, name: "Slidesgo AI", url: "https://slidesgo.com/",
+                desc: "Create slides with AI design suggestions and templates.", cat: "presentations" },
+            { num: 476, name: "Decktopus", url: "https://www.decktopus.com/",
+                desc: "AI presentation maker that creates full decks in seconds.", cat: "presentations" },
+            { num: 477, name: "Visme", url: "https://www.visme.co/",
+                desc: "Create presentations, infographics and visual content.", cat: "presentations" },
+            { num: 22, name: "Piktochart", url: "https://piktochart.com/",
+                desc: "Create quality infographics and visual reports from any prompt.", cat: "presentations" },
+            { num: 83, name: "Napkin.ai", url: "https://www.napkin.ai/", desc: "Turns your text content into clean visual diagrams.",
+                cat: "presentations" },
+            { num: 211, name: "Flourish", url: "https://flourish.studio/",
+                desc: "Create stunning interactive charts, maps and data stories.", cat: "presentations" },
+            { num: 204, name: "Infografix", url: "https://infografix.app/", desc: "Best AI infographics generator online.",
+                cat: "presentations" },
+            { num: 256, name: "Graphy Visualize", url: "https://visualize.graphy.app/",
+                desc: "Make easy data graphs from any dataset instantly.", cat: "presentations" },
+            { num: 252, name: "Eraser.io", url: "https://app.eraser.io/",
+                desc: "Generate amazing technical diagrams by writing a prompt.", cat: "presentations" },
+            { num: 514, name: "TOME", url: "https://tome.app/invite/k-bastian-cleoee3te1ucmio730llebqsm",
+                desc: "AI presentation platform with smart themes and responsive layouts.", cat: "presentations" },
+            { num: 515, name: "Beautiful.AI", url: "https://www.beautiful.ai/",
+                desc: "AI presentation design tool that transforms ideas into slides.", cat: "presentations" },
+            { num: 516, name: "MagicSlides", url: "https://www.magicslides.app/?via=aiwebtools",
+                desc: "AI presentation assistant from text, topics, YouTube, or PDFs.", cat: "presentations" },
+            { num: 517, name: "Decktopus", url: "https://www.decktopus.com/?via=aiwebtools",
+                desc: "AI presentation generator with one-click design and auto layouts.", cat: "presentations" },
+            { num: 520, name: "SlidesGO", url: "https://slidesgo.com/",
+                desc: "Free Google Slides and PowerPoint templates.", cat: "presentations" },
+            { num: 521, name: "Genial.ly", url: "https://genial.ly/",
+                desc: "Interactive content creation with gamified and media-rich templates.", cat: "presentations" },
+            { num: 522, name: "SlidesAI.io", url: "https://www.slidesai.io/?via=aiwebtools",
+                desc: "AI tool that transforms text into stunning presentation slides.", cat: "presentations" },
+            { num: 523, name: "Gamma.app", url: "https://gamma.app/signup?r=9tw5vxq9e8sbacz",
+                desc: "AI platform for creating webpages, landing pages, and presentations.", cat: "presentations" },
+            { num: 524, name: "SendSteps", url: "https://www.sendsteps.com/en/ai/",
+                desc: "AI presentation maker that creates interactivity and design.", cat: "presentations" },
+
+            // ─── DESIGN & CREATIVE ───
+            { num: 485, name: "Canva AI", url: "https://www.canva.com/ai-image-generator/",
+                desc: "Canva's AI image generation and design tools.", cat: "design" },
+            { num: 484, name: "Looka", url: "https://looka.com/", desc: "Generate custom logos and complete brand kits with AI.",
+                cat: "design" },
+            { num: 421, name: "Designs.ai", url: "https://designs.ai/", desc: "All-in-one AI suite for logos, videos and mockups.",
+                cat: "design" },
+            { num: 486, name: "Uizard", url: "https://uizard.io/", desc: "Turn rough sketches into polished app mockups.",
+                cat: "design" },
+            { num: 487, name: "Microsoft Designer", url: "https://designer.microsoft.com/",
+                desc: "AI design tool for creating stunning social media posts.", cat: "design" },
+            { num: 488, name: "Khroma", url: "https://www.khroma.co/",
+                desc: "AI color tool that learns your preferences to generate palettes.", cat: "design" },
+            { num: 489, name: "Galileo AI", url: "https://www.usegalileo.ai/",
+                desc: "Generate high-fidelity UI designs from text descriptions.", cat: "design" },
+            { num: 5, name: "AutoDraw", url: "https://www.autodraw.com/",
+                desc: "Fast drawing for everyone — AI guesses what you're drawing.", cat: "design" },
+            { num: 36, name: "Visily.ai", url: "https://www.visily.ai/",
+                desc: "Communicate UI ideas without complicated design software.", cat: "design" },
+            { num: 91, name: "unDraw", url: "https://undraw.co/", desc: "Open-source illustrations for any idea — free forever.",
+                cat: "design" },
+            { num: 92, name: "Rotato", url: "https://rotato.app/", desc: "Stunning 3D device mockups with your own designs.",
+                cat: "design" },
+            { num: 146, name: "Pacdora", url: "https://www.pacdora.com/", desc: "All types of amazing mockups across many categories.",
+                cat: "design" },
+            { num: 87, name: "Dribbble", url: "https://dribbble.com/", desc: "Explore work from the most talented designers worldwide.",
+                cat: "design" },
+            { num: 184, name: "Neamx", url: "https://neamx.com/", desc: "Turn video titles into high-converting thumbnails.",
+                cat: "design" },
+            { num: 229, name: "TailorNova", url: "https://tailornova.com/", desc: "Design your own unique clothes with AI assistance.",
+                cat: "design" },
+            { num: 992, name: "Resleeve", url: "https://resleeve.ai/", desc: "Instantly generate realistic fashion designs with AI.",
+                cat: "design" },
+            { num: 167, name: "Canva", url: "https://www.canva.com/?referrerCode=ttz-bdb-hyz&referrer=incentivised-referral",
+                desc: "Cloud-based graphic design tool with AI integrations.", cat: "design" },
+            { num: 182, name: "DesignBeast", url: "https://jvz8.com/c/2848457/371547/",
+                desc: "AI design suite for mockups, logos, and background removal.", cat: "design" },
+            { num: 191, name: "Flair.ai", url: "https://flair.ai/",
+                desc: "AI design tool for branded content and product visuals.", cat: "design" },
+            { num: 195, name: "Illustroke", url: "https://illustroke.com?aff=JtZL8P68",
+                desc: "AI design tool that transforms text prompts into vector illustrations.", cat: "design" },
+            { num: 201, name: "Khroma", url: "https://www.khroma.co/",
+                desc: "AI color palette generator that learns your preferences.", cat: "design" },
+            { num: 209, name: "Microsoft Designer", url: "https://designer.microsoft.com/",
+                desc: "AI design tool with text-to-image and personalized recommendations.", cat: "design" },
+            { num: 228, name: "PixTeller", url: "https://pixteller.com?fp_ref=aiwebtools",
+                desc: "Online image editor and animation maker with templates.", cat: "design" },
+            { num: 229, name: "Pebblely", url: "https://pebblely.com/",
+                desc: "Generate stunning product photos with your brand's colors.", cat: "design" },
+            { num: 439, name: "Looka", url: "https://looka.grsm.io/aiwebtools",
+                desc: "AI-powered logo maker and brand identity platform.", cat: "design" },
+            { num: 450, name: "MyBrandNewLogo AI", url: "https://shareasale.com/r.cfm?b=1559933&u=3604681&m=98455&urllink=&afftrack=",
+                desc: "AI logo maker with smart shapes and full copyright.", cat: "design" },
+            { num: 488, name: "Looka AI", url: "https://looka.grsm.io/aiwebtools",
+                desc: "AI logo maker with brand kit and marketing materials.", cat: "design" },
+            { num: 489, name: "SmashingLogo", url: "https://shareasale.com/r.cfm?b=1361762&u=3604681&m=89054&urllink=&afftrack=",
+                desc: "AI logo maker with industry keywords and virtual designers.", cat: "design" },
+            { num: 490, name: "MyBrandNewLogo", url: "https://shareasale.com/r.cfm?b=1559933&u=3604681&m=98455&urllink=&afftrack=",
+                desc: "AI logo generator with social media and print-ready files.", cat: "design" },
+            { num: 491, name: "Kreateable", url: "https://shareasale.com/r.cfm?b=1761493&u=3604681&m=109859&urllink=&afftrack=",
+                desc: "Generative AI platform for logos, social posts, and ads.", cat: "design" },
+            { num: 492, name: "Tailor Brands", url: "https://tailorbrands.go2cloud.org/aff_c?offer_id=16&aff_id=6027",
+                desc: "AI logo maker with high-resolution files and business tools.", cat: "design" },
+            { num: 493, name: "LogoMaker", url: "https://shareasale.com/r.cfm?b=2309396&u=3604681&m=140058&urllink=&afftrack=",
+                desc: "AI logo design tool with vector files and brand products.", cat: "design" },
+            { num: 494, name: "LOGO.com", url: "https://logo.com/",
+                desc: "Free logo maker with brand building tools and Stitch.", cat: "design" },
+            { num: 495, name: "Brandmark.io", url: "https://brandmark.io/",
+                desc: "AI logo creation with comprehensive branding packages.", cat: "design" },
+            { num: 496, name: "DesignEvo", url: "https://shareasale.com/u.cfm?d=874885&m=79751&u=3604681&afftrack=",
+                desc: "Online logo maker with 10,000+ templates and free vector icons.", cat: "design" },
+            { num: 500, name: "HueMint", url: "https://huemint.com/",
+                desc: "AI color palette generator for brands and graphic design.", cat: "design" },
+            { num: 507, name: "Diagram", url: "https://diagram.com/",
+                desc: "AI-powered design tools with Magician for Figma.", cat: "design" },
+            { num: 566, name: "HotPot.ai", url: "https://hotpot.ai/",
+                desc: "AI creative tool for graphics, images, and written content.", cat: "design" },
+            { num: 887, name: "Designs.ai", url: "https://shareasale.com/r.cfm?b=1740607&u=3604681&m=108481&urllink=designs%2Eai%2F&afftrack=aiwebtools",
+                desc: "AI-powered creative platform for logos, videos, and banners.", cat: "design" },
+
+            // ─── WEBSITE BUILDERS ───
+            { num: 480, name: "Framer AI", url: "https://www.framer.com/ai",
+                desc: "Generate fully responsive websites from text prompts.", cat: "website" },
+            { num: "W3", name: "Durable", url: "https://durable.co/", desc: "Build a complete AI website in 30 seconds.",
+                cat: "website" },
+            { num: 482, name: "Dora AI", url: "https://www.dora.run/", desc: "Build animated 3D-rich websites without coding.",
+                cat: "website" },
+            { num: "W1", name: "Hocoos", url: "https://hocoos.com/", desc: "AI-powered website builder for small businesses.",
+                cat: "website" },
+            { num: "W2", name: "Hostinger", url: "https://www.hostinger.com/",
+                desc: "AI website builder with hosting in one platform.", cat: "website" },
+            { num: "W4", name: "Mixo.io", url: "https://www.mixo.io/",
+                desc: "AI-generated startup landing pages from a single idea.", cat: "website" },
+            { num: "W7", name: "Webflow", url: "https://webflow.com/",
+                desc: "Build professional CMS-powered websites without coding.", cat: "website" },
+            { num: "W8", name: "Carrd", url: "https://carrd.co/", desc: "Simple, free, fully responsive one-page sites.",
+                cat: "website" },
+            { num: 40, name: "Trickle.so", url: "https://trickle.so/", desc: "Turn your ideas into live apps and websites with AI.",
+                cat: "website" },
+            { num: 81, name: "WebSim", url: "https://websim.com/", desc: "Simulate and build web pages and games with AI.",
+                cat: "website" },
+            { num: 481, name: "Wix ADI", url: "https://www.wix.com/", desc: "Wix's AI design intelligence builds sites automatically.",
+                cat: "website" },
+            { num: 479, name: "10Web AI Builder", url: "https://10web.io/", desc: "Generate WordPress websites automatically with AI.",
+                cat: "website" },
+            { num: 368, name: "Plaza AI", url: "https://www.plazaai.co/site_builder",
+                desc: "AI-powered text-to-website generator.", cat: "website" },
+            { num: 469, name: "MIXO", url: "https://mixo.io/?via=aiwebtools",
+                desc: "AI website generator that creates complete websites from a sentence.", cat: "website" },
+            { num: 470, name: "Durable", url: "https://durable.co/ai-website-builder",
+                desc: "AI website builder with hosting, analytics, and custom domain.", cat: "website" },
+            { num: 471, name: "PineappleAI Website Generator", url: "https://www.pineapplebuilder.com/?via=aiwebtools",
+                desc: "AI website builder for entrepreneurs with custom content generation.", cat: "website" },
+            { num: 472, name: "10Web", url: "https://10web.io/?from=aiwebtools",
+                desc: "AI Website Builder with Google Cloud hosting and PageSpeed Booster.", cat: "website" },
+            { num: 473, name: "Framer AI", url: "https://www.framer.com?via=aiwebtools",
+                desc: "AI-powered website creation with Figma integration.", cat: "website" },
+            { num: 474, name: "KleapAI", url: "https://kleap.co/?via=aiwebtools",
+                desc: "AI website builder that creates mobile sites in 30 seconds.", cat: "website" },
+            { num: 475, name: "Hey Leia Website Generator", url: "https://heyleia.com/",
+                desc: "Custom digital website builder with AI-powered design.", cat: "website" },
+            { num: 476, name: "USMO", url: "https://www.umso.com/",
+                desc: "AI website builder with responsive design and multilingual support.", cat: "website" },
+            { num: 477, name: "Hocoos AI", url: "https://hocoos.com/",
+                desc: "AI website generator with logo maker and content creator.", cat: "website" },
+            { num: 478, name: "Weblium", url: "https://shareasale.com/r.cfm?b=1433757&u=3604681&m=92319&urllink=&afftrack=",
+                desc: "No-code website builder with marketing and SEO tools.", cat: "website" },
+            { num: 480, name: "Dora AI", url: "https://www.dora.run/ai_launch/85KKW8UVA",
+                desc: "AI 3D website design platform with no-code editor.", cat: "website" },
+            { num: 481, name: "Unicorn Platform", url: "https://unicornplatform.com/?via=aiwebtools",
+                desc: "AI landing page builder for startups and SaaS companies.", cat: "website" },
+            { num: 725, name: "10Web", url: "https://10web.io/?_from=aiwebtools",
+                desc: "AI website builder with automated hosting and PageSpeed optimization.", cat: "website" },
+
+            // ─── 3D & ANIMATION ───
+            { num: 490, name: "Spline AI", url: "https://spline.design/", desc: "Design interactive 3D experiences for the web.",
+                cat: "3d" },
+            { num: 491, name: "Luma Genie", url: "https://lumalabs.ai/genie", desc: "Generate 3D models from text descriptions instantly.",
+                cat: "3d" },
+            { num: 492, name: "Kaedim", url: "https://www.kaedim3d.com/", desc: "Convert 2D concept art images to full 3D models.",
+                cat: "3d" },
+            { num: 493, name: "Move AI", url: "https://www.move.ai/", desc: "Capture professional motion data from a single smartphone.",
+                cat: "3d" },
+            { num: 61, name: "Meshy.ai", url: "https://www.meshy.ai/", desc: "AI 3D model generator from text or images.",
+                cat: "3d" },
+            { num: 85, name: "Cartwheel", url: "https://getcartwheel.com/", desc: "Animate characters for videos, 3D and games.",
+                cat: "3d" },
+            { num: 6, name: "Wonder Dynamics", url: "https://wonderdynamics.com/",
+                desc: "AI tool that automatically animates CG characters.", cat: "3d" },
+            { num: 137, name: "Rendora.ai", url: "https://www.rendora.ai/", desc: "World's first 3D AI avatar video platform.",
+                cat: "3d" },
+            { num: 198, name: "Humva", url: "https://humva.com/", desc: "Create realistic talking avatar videos easily.",
+                cat: "3d" },
+            { num: 266, name: "Sketchfab", url: "https://sketchfab.com/", desc: "Browse and download 3D models in every category.",
+                cat: "3d" },
+            { num: 271, name: "Formia.so", url: "https://www.formia.so/", desc: "Convert your 2D logos into stunning 3D versions.",
+                cat: "3d" },
+            { num: 274, name: "Rokoko", url: "https://www.rokoko.com/", desc: "Capture motions and animate 3D characters easily.",
+                cat: "3d" },
+            { num: 136, name: "DeepMotion", url: "https://www.deepmotion.com/",
+                desc: "Convert video to 3D animation — text to 3D animation.", cat: "3d" },
+            { num: 153, name: "3Dfy.ai", url: "https://3dfy.ai/", desc: "Text-to-3D model generation with AI.", cat: "3d" },
+            { num: 205, name: "Luma AI", url: "https://lumalabs.ai/",
+                desc: "Create lifelike 3D images from video or images with Neural Radiance Fields.", cat: "3d" },
+            { num: 210, name: "MetaHuman", url: "https://www.unrealengine.com/en-US/metaHuman",
+                desc: "Create photorealistic digital humans for Unreal Engine.", cat: "3d" },
+            { num: 235, name: "Poly AI", url: "https://withpoly.com/browse/textures",
+                desc: "Generate 3D textures and graphics from text prompts.", cat: "3d" },
+            { num: 236, name: "Polycam", url: "https://poly.cam/",
+                desc: "Capture 360-degree panoramas and 3D environments with AI.", cat: "3d" },
+            { num: 239, name: "RoseBud AI", url: "https://www.rosebud.ai/",
+                desc: "AI game asset generator and avatar animation tool.", cat: "3d" },
+            { num: 240, name: "ManyWorlds.run", url: "https://manyworlds.run/",
+                desc: "Generate 3D environments from text prompts with VR integration.", cat: "3d" },
+            { num: 245, name: "SkyBox AI", url: "https://skybox.blockadelabs.com/",
+                desc: "Convert text descriptions into immersive 3D environments.", cat: "3d" },
+            { num: 263, name: "Wonder Dynamics", url: "https://wonderdynamics.com/",
+                desc: "AI tool for animating CG characters into live-action scenes.", cat: "3d" },
+            { num: 273, name: "LeiaPix Converter", url: "https://convert.leiapix.com/",
+                desc: "Transform 2D images into 3D Lightfield images.", cat: "3d" },
+            { num: 275, name: "Monster Mash Zone", url: "https://monstermash.zone/",
+                desc: "Sketch-based 3D modeling and animation tool.", cat: "3d" },
+            { num: 276, name: "Rokoko", url: "https://www.rokoko.com/",
+                desc: "Full-body motion capture tools for realistic animations.", cat: "3d" },
+            { num: 341, name: "Move.ai", url: "https://www.move.ai/",
+                desc: "AI motion capture from video, HD cameras, and mobile devices.", cat: "3d" },
+            { num: 342, name: "DeepMotionCapture", url: "https://www.deepmotion.com/animate_3d?qad=1&gclid=Cj0KCQjwxYOibhC9ARIsANiEifaFSs89mduH1Un8tC2bmV2suSfz8lkFg7zCKoYSnLrbsF74fcc-VoaAgB4EALw_wcB",
+                desc: "AI motion capture for 3D animation from video.", cat: "3d" },
+            { num: 343, name: "Rokoko Vision", url: "https://www.rokoko.com/",
+                desc: "AI-powered motion capture with webcam or uploaded videos.", cat: "3d" },
+            { num: 344, name: "Cascadeur", url: "https://cascadeur.com/",
+                desc: "AI-assisted keyframe animation software for 3D characters.", cat: "3d" },
+            { num: 374, name: "Hiber3D", url: "https://www.hiber3d.com/",
+                desc: "AI platform for building 3D worlds without coding.", cat: "3d" },
+            { num: 424, name: "TAFI Text-to-3D", url: "https://maketafi.com/ai",
+                desc: "Rapidly create customized 3D characters with AI.", cat: "3d" },
+            { num: 865, name: "GET3D by NVIDIA", url: "https://nv-tlabs.github.io/GET3D/?ref=aiwebtools",
+                desc: "AI model for generating high-quality 3D textured shapes.", cat: "3d" },
+            { num: 866, name: "Charmed AI", url: "https://charmed.ai/splash",
+                desc: "Generate stunning 3D object textures for game assets.", cat: "3d" },
+            { num: 913, name: "Ponzu", url: "https://www.ponzu.gg/",
+                desc: "AI tool for generating textures for 3D assets from text prompts.", cat: "3d" },
+
+            // ─── PDF & FILE TOOLS ───
+            { num: 494, name: "ChatPDF", url: "https://www.chatpdf.com/", desc: "Chat with any PDF document using AI.",
+                cat: "pdf" },
+            { num: 495, name: "PDF.ai", url: "https://pdf.ai/", desc: "Ask questions and extract insights from any PDF.",
+                cat: "pdf" },
+            { num: 496, name: "iLovePDF", url: "https://www.ilovepdf.com/",
+                desc: "Merge, split, compress, convert and edit PDFs online.", cat: "pdf" },
+            { num: 497, name: "Smallpdf", url: "https://smallpdf.com/", desc: "Edit and convert PDFs online easily.",
+                cat: "pdf" },
+            { num: 59, name: "Sejda PDF", url: "https://www.sejda.com/", desc: "Easy, pleasant PDF editor with many tools.",
+                cat: "pdf" },
+            { num: 74, name: "123apps", url: "https://123apps.com/", desc: "Online tools for video, audio and PDF files.",
+                cat: "pdf" },
+            { num: 145, name: "TinyWow", url: "https://tinywow.com/", desc: "Free online PDF, video and image tools.",
+                cat: "pdf" },
+            { num: 166, name: "CloudConvert", url: "https://cloudconvert.com/",
+                desc: "Online file converter supporting nearly every format.", cat: "pdf" },
+            { num: 235, name: "URLtoAny", url: "https://www.urltoany.com/", desc: "Convert any URL to Markdown, PDF or plain text.",
+                cat: "pdf" },
+            { num: 177, name: "FilePursuit", url: "https://filepursuit.com/", desc: "Search the web for files, videos and audio.",
+                cat: "pdf" },
+            { num: 241, name: "FileUnzip", url: "https://www.fileunzip.com/", desc: "Every tool to unzip and extract files, 100% free.",
+                cat: "pdf" },
+            { num: 154, name: "123apps", url: "https://123apps.com/",
+                desc: "Web-based tools for video, audio, PDF, and format conversion.", cat: "pdf" },
+            { num: 577, name: "FreeConvert.com", url: "https://www.freeconvert.com/",
+                desc: "Online file conversion platform supporting 1500+ formats.", cat: "pdf" },
+
+            // ─── SOCIAL MEDIA & MARKETING ───
+            { num: 498, name: "Buffer AI Assistant", url: "https://buffer.com/ai-assistant",
+                desc: "Generate compelling social media captions with AI.", cat: "social" },
+            { num: 499, name: "Hootsuite OwlyWriter", url: "https://www.hootsuite.com/platform/owlywriter-ai",
+                desc: "AI tool for writing engaging social captions.", cat: "social" },
+            { num: 500, name: "AdCreative.ai", url: "https://www.adcreative.ai/",
+                desc: "Generate high-converting ad creatives with AI.", cat: "social" },
+            { num: 501, name: "Lately AI", url: "https://www.lately.ai/",
+                desc: "Repurpose long content into dozens of social posts.", cat: "social" },
+            { num: 502, name: "Brand24", url: "https://brand24.com/", desc: "Monitor brand mentions across the web with AI insights.",
+                cat: "social" },
+            { num: 3, name: "SuperMeme", url: "https://supermeme.ai/",
+                desc: "Search in natural language and get best-fit meme templates.", cat: "social" },
+            { num: 76, name: "ManyChat", url: "https://get.manychat.com/",
+                desc: "Auto-respond to every Instagram comment with a DM.", cat: "social" },
+            { num: 90, name: "Inflact", url: "https://inflact.com/", desc: "Adapt your Instagram account for business growth.",
+                cat: "social" },
+            { num: 96, name: "Crayo.ai", url: "https://crayo.ai/",
+                desc: "All-in-one tool for AI voiceovers, subtitles and short videos.", cat: "social" },
+            { num: 104, name: "Flair.ai", url: "https://flair.ai/", desc: "Build stunning AI product content for ads and social.",
+                cat: "social" },
+            { num: 116, name: "HSuper Tools", url: "https://hsuper.tools/", desc: "400+ online SEO and web tools for free.",
+                cat: "social" },
+            { num: 169, name: "AdGen AI", url: "https://www.adgenai.com/", desc: "AI ad generator that crafts both copy and visuals.",
+                cat: "social" },
+            { num: 243, name: "WinningHunter", url: "https://winninghunter.com/",
+                desc: "Research winning products and create ads with AI.", cat: "social" },
+            { num: 122, name: "Bitly", url: "https://bitly.com/", desc: "URL shortener, QR codes and branded landing pages.",
+                cat: "social" },
+            { num: 1012, name: "Clickable", url: "https://clickable.so/",
+                desc: "Generate beautiful, brand-consistent ads in seconds.", cat: "social" },
+            { num: 330, name: "AdCreative", url: "https://free-trial.adcreative.ai/aiwebtools",
+                desc: "AI ad creative generation with data-backed results.", cat: "social" },
+            { num: 331, name: "BHuman", url: "https://app.bhuman.ai/?ref=zde0otr",
+                desc: "AI video marketing with voice cloning and auto lip sync.", cat: "social" },
+            { num: 350, name: "Syllaby.io", url: "https://syllaby.io/?via=aiwebtools",
+                desc: "AI social media content creation with Digital Twin avatars.", cat: "social" },
+            { num: 442, name: "NapoleonCat", url: "https://napoleoncat.grsm.io/aiwebtools",
+                desc: "Social media management platform with AI moderation.", cat: "social" },
+            { num: 609, name: "Predis.ai", url: "https://predis.ai/?ref=aiwebtools",
+                desc: "AI social media tool combining ChatGPT, Canva, and Hootsuite.", cat: "social" },
+            { num: 610, name: "Zubtitle", url: "https://zubtitle.com/?via=aiwebtools",
+                desc: "AI video editor for adding subtitles and captions.", cat: "social" },
+            { num: 612, name: "Pallyy", url: "https://pallyy.com/tools/tweet-generator",
+                desc: "Social media management with AI tweet generator.", cat: "social" },
+            { num: 614, name: "Contentdrips AI", url: "https://contentdrips.com/ai/",
+                desc: "AI social media content creation for posts and visuals.", cat: "social" },
+            { num: 615, name: "Anyword", url: "https://anyword.com/?fpr=aiwebtools",
+                desc: "AI performance writing platform for marketing teams.", cat: "social" },
+            { num: 616, name: "TweetMonk", url: "https://tweetmonk.com/",
+                desc: "AI-powered tweet scheduler for Twitter reach and engagement.", cat: "social" },
+            { num: 617, name: "GoCharlie", url: "https://gocharlie.ai/?fpr=aiwebtools",
+                desc: "AI content creation for businesses and students.", cat: "social" },
+            { num: 625, name: "Confect.io", url: "https://confect.io/products/automations",
+                desc: "AI product advertising campaigns for social media.", cat: "social" },
+            { num: 626, name: "ContentStudio", url: "https://contentstudio.io/?fpr=kenneth50",
+                desc: "AI social media management with content creation and scheduling.", cat: "social" },
+            { num: 627, name: "Repurpose.io", url: "https://repurpose.io/?aff=196436",
+                desc: "Content repurposing for video and audio creators.", cat: "social" },
+            { num: 632, name: "Bit.ai", url: "https://bit.ai/?deal=aiwebtools",
+                desc: "Workplace collaboration platform with document creation and tracking.", cat: "social" },
+            { num: 634, name: "DUX-SOUP", url: "https://www.dux-soup.com/linkedin-automation?fpr=aiwebtools",
+                desc: "LinkedIn automation tool for lead generation.", cat: "social" },
+            { num: 635, name: "Wiza", url: "https://wiza.co/?via=aiwebtools",
+                desc: "LinkedIn lead generation with accurate contact information.", cat: "social" },
+            { num: 637, name: "MediaMister", url: "https://www.mediamister.com/#644f060544dad",
+                desc: "Social media enhancement with real likes, followers, and views.", cat: "social" },
+            { num: 640, name: "PostWise", url: "https://postwise.ai/?get=aiwebtools",
+                desc: "AI social media post creation and scheduling.", cat: "social" },
+            { num: 642, name: "NapoleonCat", url: "https://napoleoncat.grsm.io/aiwebtools",
+                desc: "Social media management platform for teams and businesses.", cat: "social" },
+            { num: 647, name: "SocialBee", url: "https://get.socialbee.io/aiwebtools",
+                desc: "Social media management with AI content generation.", cat: "social" },
+            { num: 648, name: "Chatfuel", url: "https://chatfuel.com/",
+                desc: "WhatsApp marketing platform with ChatGPT integration.", cat: "social" },
+            { num: 649, name: "Replai.so", url: "https://replai.so/",
+                desc: "AI-powered social media tool for Twitter and LinkedIn.", cat: "social" },
+            { num: 650, name: "RADAAR", url: "https://rdar.li/pl/3enmjRd",
+                desc: "Social media management with publishing, tracking, and messaging.", cat: "social" },
+            { num: 651, name: "FeedHive", url: "https://www.feedhive.com/",
+                desc: "AI-powered social media companion with writing assistant.", cat: "social" },
+            { num: 652, name: "AdCopy.ai", url: "https://adcopy.ai/?ref=zdjfzge",
+                desc: "AI ad creative generation from Facebook data.", cat: "social" },
+            { num: 654, name: "Social Studio", url: "https://socialstudio.ai/?ref=aiwebtools",
+                desc: "AI Instagram content creation, design, and scheduling.", cat: "social" },
+            { num: 655, name: "FastReply.io", url: "https://fastreply.io/",
+                desc: "AI-powered social media engagement for Twitter and LinkedIn.", cat: "social" },
+            { num: 656, name: "TweetyAI", url: "https://tweetyai.com/",
+                desc: "AI tweet generator for Twitter content creation.", cat: "social" },
+            { num: 657, name: "Postifyapp", url: "https://www.postifyapp.com/",
+                desc: "AI-powered Twitter companion for content creation.", cat: "social" },
+            { num: 658, name: "ZAAP", url: "https://zaap.ai/?ref=aiwebtools",
+                desc: "Creator platform for monetization and audience engagement.", cat: "social" },
+            { num: 660, name: "Tweetify", url: "https://www.twitterly.co/",
+                desc: "Twitter growth platform with viral tweet database.", cat: "social" },
+            { num: 664, name: "The Social Media Post Generator", url: "https://app.brancher.ai/2bb5a84f-b67a-4d4f-944d-56e83255ae01",
+                desc: "AI social media post generator for Facebook and Instagram.", cat: "social" },
+            { num: 665, name: "Plixi", url: "https://plixi.com/?partner=aiwebtools",
+                desc: "AI Instagram growth service with real followers.", cat: "social" },
+            { num: 667, name: "ManyChat", url: "https://manychat.pxf.io/c/4183964/586565/9662",
+                desc: "Chat marketing platform for Instagram, Facebook, and SMS.", cat: "social" },
+            { num: 668, name: "OCOYA", url: "https://www.ocoya.com/?via=aiwebtools",
+                desc: "AI social media management with content creation and scheduling.", cat: "social" },
+            { num: 669, name: "HypeFury", url: "https://hypefury.com/?via=aiwebtools",
+                desc: "Twitter growth and monetization platform.", cat: "social" },
+            { num: 670, name: "POSTLY", url: "https://postly.ai/",
+                desc: "Social media management with one-click publishing and AI content.", cat: "social" },
+            { num: 672, name: "Expandi", url: "https://expandi.io/?gr_pk=PRWR&gr_uid=5q8A",
+                desc: "LinkedIn automation tool for outreach and lead generation.", cat: "social" },
+            { num: 929, name: "Social Studio", url: "https://socialstudio.ai/?ref=aiweb",
+                desc: "AI Instagram assistant for content creation and scheduling.", cat: "social" },
+
+            // ─── UTILITY & PRODUCTIVITY ───
+            { num: 504, name: "Fireflies.ai", url: "https://fireflies.ai/",
+                desc: "AI meeting assistant that transcribes and summarizes calls.", cat: "utility" },
+            { num: 503, name: "Otter.ai Meeting", url: "https://otter.ai/",
+                desc: "Real-time meeting transcription and summary tool.", cat: "utility" },
+            { num: 14, name: "Temp Mail", url: "https://temp-mail.org/en/",
+                desc: "Temporary, secure, anonymous disposable email.", cat: "utility" },
+            { num: 172, name: "MailTemp", url: "https://mailtemp.dev/", desc: "Free anonymous disposable email addresses.",
+                cat: "utility" },
+            { num: 122, name: "Rebrandly", url: "https://www.rebrandly.com/",
+                desc: "Branded short URLs and AI-powered link insights.", cat: "utility" },
+            { num: 156, name: "Tally Forms", url: "https://tally.so/", desc: "Free, intuitive online form builder.",
+                cat: "utility" },
+            { num: 1022, name: "DeepL", url: "https://deepl.com/", desc: "World's most accurate AI translation tool.",
+                cat: "utility" },
+            { num: 44, name: "Wayback Machine", url: "https://web.archive.org/",
+                desc: "See how any website looked decades ago.", cat: "utility" },
+            { num: 133, name: "CityWalks", url: "https://citywalks.live/", desc: "Virtual walking tours of cities around the world.",
+                cat: "utility" },
+            { num: 179, name: "VirtualVacation", url: "https://virtualvacation.us/",
+                desc: "Experience the world from home with virtual travel.", cat: "utility" },
+            { num: 160, name: "PlayPhrase", url: "https://www.playphrase.me/",
+                desc: "Find any phrase from any movie or TV show.", cat: "utility" },
+            { num: 232, name: "Human Benchmark", url: "https://humanbenchmark.com/",
+                desc: "Measure your reaction time and cognitive abilities.", cat: "utility" },
+            { num: 69, name: "SuperLogout", url: "https://superlogout.com/", desc: "Log out from all websites everywhere instantly.",
+                cat: "utility" },
+            { num: 228, name: "Atlas Obscura", url: "https://www.atlasobscura.com/",
+                desc: "Discover extraordinary places and hidden stories worldwide.", cat: "utility" },
+            { num: 301, name: "TV.Garden", url: "https://tv.garden/", desc: "Watch live local TV channels from around the world.",
+                cat: "utility" },
+            { num: 205, name: "EmuGames", url: "https://www.emugames.net/", desc: "Play free classic emulator games online.",
+                cat: "utility" },
+            { num: 62, name: "Buildbox", url: "https://signup.buildbox.com/", desc: "No-code game creator — build games without coding.",
+                cat: "utility" },
+            { num: 509, name: "AI Dungeon", url: "https://aidungeon.com/",
+                desc: "Text-based AI adventure game — infinite story possibilities.", cat: "utility" },
+            { num: 276, name: "MyRetroTVs", url: "https://www.myretrotvs.com/",
+                desc: "Relive nostalgia through virtual televisions from the past.", cat: "utility" },
+            { num: 4, name: "Descript", url: "https://get.descript.com/u44uyqg52oxh",
+                desc: "Multimedia editing platform with transcription and screen recording.", cat: "utility" },
+            { num: 65, name: "DeepL.com", url: "https://www.deepl.com/translator",
+                desc: "AI translation platform supporting 31 languages.", cat: "utility" },
+            { num: 70, name: "Duplichecker", url: "https://www.duplichecker.com/",
+                desc: "Plagiarism checker, grammar checker, and paraphrasing tool.", cat: "utility" },
+            { num: 78, name: "Magical", url: "https://www.getmagical.com/",
+                desc: "AI productivity app for automating repetitive tasks.", cat: "utility" },
+            { num: 106, name: "Refrens", url: "https://www.refrens.com/free-online-invoice-generator",
+                desc: "AI-powered invoicing and financial management for freelancers.", cat: "utility" },
+            { num: 114, name: "SheetsAI", url: "https://www.sheetai.app/?via=Aiwetbooks",
+                desc: "AI functions for Google Sheets with plain English commands.", cat: "utility" },
+            { num: 124, name: "SuperHuman", url: "https://superhuman.com/",
+                desc: "AI-powered email application for high-performing teams.", cat: "utility" },
+            { num: 131, name: "SiteChecker", url: "https://shareasale.com/r.cfm?b=1501623&u=3604681&m=95321&urllink=&afftrack=",
+                desc: "Website SEO checker and audit tool for businesses.", cat: "utility" },
+            { num: 143, name: "TinyWow.com", url: "https://tinywow.com/",
+                desc: "Free online tools for PDF, video, image, and text.", cat: "utility" },
+            { num: 256, name: "TinyWow", url: "https://tinywow.com/",
+                desc: "Hassle-free tools for PDF, video, image, and more.", cat: "utility" },
+            { num: 318, name: "Airgram.io", url: "https://app.airgram.io/?via=aiwebtools",
+                desc: "AI meeting productivity tool with transcription and highlights.", cat: "utility" },
+            { num: 334, name: "Synthesys", url: "https://paykstrt.com/34904/136109",
+                desc: "AI content suite for videos, voiceovers, and images.", cat: "utility" },
+            { num: 336, name: "Replika", url: "https://replika.com/",
+                desc: "AI companion for conversation, augmented reality, and coaching.", cat: "utility" },
+            { num: 362, name: "Shade", url: "https://www.shade.inc/",
+                desc: "Private AI file explorer with visual search and auto-tagging.", cat: "utility" },
+            { num: 367, name: "QR Code AI", url: "https://qrcode-ai.com/?via=aiwebtools",
+                desc: "AI-enhanced custom QR codes for brand marketing.", cat: "utility" },
+            { num: 371, name: "DocWorm", url: "https://docworm.ai/",
+                desc: "Personal data retrieval and analytics platform for any document.", cat: "utility" },
+            { num: 381, name: "Pinokio.computer", url: "https://pinokio.computer/",
+                desc: "Browser tool to install, execute, and control AI applications.", cat: "utility" },
+            { num: 426, name: "Convai", url: "https://convai.com/",
+                desc: "Conversational AI platform for virtual worlds and games.", cat: "utility" },
+            { num: 433, name: "Quivino", url: "https://www.quinv.io/ai",
+                desc: "AI presentation creation for product marketing with avatars.", cat: "utility" },
+            { num: 436, name: "BUILDAI", url: "https://gumroad.com/a/815886803/cahfki",
+                desc: "No-code AI app builder for businesses and creators.", cat: "utility" },
+            { num: 437, name: "Reply.io", url: "https://get.reply.io/aiwebtools1415",
+                desc: "AI-driven sales engagement platform for B2B lead generation.", cat: "utility" },
+            { num: 440, name: "Meet Geek", url: "https://get.meetgeek.ai/aiwebtools",
+                desc: "AI meeting assistant with recording, transcription, and summaries.", cat: "utility" },
+            { num: 446, name: "SalesFlare", url: "https://salesflare.grsm.io/aiwebtools",
+                desc: "AI CRM for small and medium-sized B2B businesses.", cat: "utility" },
+            { num: 447, name: "SaneBox", url: "https://try.sanebox.com/aiwebtools",
+                desc: "AI email management tool that organizes your inbox.", cat: "utility" },
+            { num: 534, name: "MeetGeek", url: "https://get.meetgeek.ai/aiwebtools",
+                desc: "AI meeting assistant with recording, transcription, and summaries.", cat: "utility" },
+            { num: 541, name: "Cogram", url: "https://www.cogram.com/",
+                desc: "AI productivity tool for meeting notes and task management.", cat: "utility" },
+            { num: 542, name: "Visla", url: "https://www.visla.us/?gr_pk=0EmN&gr_uid=5q8A",
+                desc: "AI video storytelling platform for recording and editing.", cat: "utility" },
+            { num: 575, name: "DoNotPay", url: "https://donotpay.com/",
+                desc: "AI consumer champion for fighting corporations and bureaucracy.", cat: "utility" },
+            { num: 576, name: "Merlin AI", url: "https://app.getmerlin.in/plans?ref=mtem1mgul4",
+                desc: "AI chatbot with natural language processing and Chrome extension.", cat: "utility" },
+            { num: 580, name: "Axiom.ai", url: "https://axiom.ai/aiwebtools?afmc=5e",
+                desc: "Browser automation tool for repetitive web tasks.", cat: "utility" },
+            { num: 587, name: "Personal.ai", url: "https://www.personal.ai/my-ai",
+                desc: "Personal AI that reflects your viewpoints and preferences.", cat: "utility" },
+            { num: 588, name: "Spoken.io", url: "https://www.spoken.io/",
+                desc: "AI-powered online shopping and price comparison.", cat: "utility" },
+            { num: 589, name: "Notion AI", url: "https://affiliate.notion.so/aiwebtools",
+                desc: "AI-powered workspace with connected wikis, docs, and projects.", cat: "utility" },
+            { num: 591, name: "Microsoft SwiftKey", url: "https://www.microsoft.com/en-us/swiftkey?activetab=pivot_1:primaryr2",
+                desc: "AI keyboard app with predictive text and autocorrect.", cat: "utility" },
+            { num: 800, name: "Notion", url: "https://affiliate.notion.so/aiwebtools",
+                desc: "AI-powered workspace for teams with integrated AI assistance.", cat: "utility" },
+            { num: 801, name: "Taskade", url: "https://taskade.com/?via=aiwebtools",
+                desc: "AI productivity platform with chatbot and workflow automation.", cat: "utility" },
+            { num: 802, name: "SheetsAI", url: "https://www.sheetai.app/?via=Aiwebtools",
+                desc: "AI functions for Google Sheets with plain English commands.", cat: "utility" },
+            { num: 806, name: "DropBox", url: "https://www.dropbox.com/referrals/AAAy2YnslqkBow4iLZxUNWDzQT296CfaIys?src=global9",
+                desc: "File storage and sharing with AI-powered features.", cat: "utility" },
+            { num: 810, name: "Bit.ai", url: "https://bit.ai/?deal=aiwebtools",
+                desc: "Workplace and document collaboration platform.", cat: "utility" },
+            { num: 813, name: "MeetGeek", url: "https://meetgeek.grsm.io/hvbpcd7apm14",
+                desc: "AI meeting assistant with recording, transcription, and summaries.", cat: "utility" },
+            { num: 818, name: "Charma", url: "https://www.charma.com/",
+                desc: "AI team and employee management with 1:1 meetings and feedback.", cat: "utility" },
+            { num: 821, name: "Dash AI", url: "https://www.dashworks.ai/",
+                desc: "AI knowledge assistant for workplaces on Slack.", cat: "utility" },
+            { num: 822, name: "Propellor", url: "https://www.propellor.ai/",
+                desc: "Data analytics platform with AI-generated insights.", cat: "utility" },
+            { num: 826, name: "Avoma", url: "https://www.avoma.com/",
+                desc: "AI meeting assistant and revenue intelligence platform.", cat: "utility" },
+            { num: 828, name: "Searchie", url: "https://searchie.io/?fpr=kenneth37&fp_sid=aiwebtoo",
+                desc: "AI content management and delivery platform for creators.", cat: "utility" },
+            { num: 829, name: "Raycast", url: "https://affiliate.notion.so/ai-webtools",
+                desc: "AI launcher for macOS with custom extensions.", cat: "utility" },
+            { num: 832, name: "Zapier", url: "https://zapier.com/",
+                desc: "AI workflow automation platform connecting thousands of apps.", cat: "utility" },
+            { num: 838, name: "Essense", url: "https://essense.io/?via=aiwebtools",
+                desc: "AI feedback analysis for customer insights.", cat: "utility" },
+            { num: 839, name: "BetterLegal", url: "https://betterlegal.com/",
+                desc: "AI-powered business formation and legal document generation.", cat: "utility" },
+            { num: 844, name: "Cheat Layer", url: "https://cheatlayer.com/?ref=zta2nth",
+                desc: "AI business automation with natural language.", cat: "utility" },
+            { num: 845, name: "Glean AI", url: "https://www.glean.ai/",
+                desc: "AI accounts payable platform with invoice analysis.", cat: "utility" },
+            { num: 850, name: "TypeDesk", url: "https://www.typedesk.com/?via=aiwebtools",
+                desc: "AI text automation tool for quick responses and saved replies.", cat: "utility" },
+            { num: 851, name: "IdeaBuddy", url: "https://ideabuddy.com/?via=Aiwebtools",
+                desc: "AI business planning software with idea validation.", cat: "utility" },
+            { num: 876, name: "Parsio", url: "https://parsio.io/?ref=aiwebtools",
+                desc: "AI data extraction from PDFs, emails, and documents.", cat: "utility" },
+            { num: 881, name: "Pabbly", url: "https://www.pabbly.com/",
+                desc: "Business apps for form creation, email marketing, and billing.", cat: "utility" },
+
+            // ─── SECURITY & PRIVACY ───
+            { num: 78, name: "VirusTotal", url: "https://www.virustotal.com/",
+                desc: "Analyze suspicious files, domains and IPs for threats.", cat: "security" },
+            { num: 121, name: "HaveIBeenPwned", url: "https://haveibeenpwned.com/",
+                desc: "Check if your email is in any known data breach.", cat: "security" },
+            { num: 505, name: "1Password", url: "https://1password.com/", desc: "Password manager with AI security alerts.",
+                cat: "security" },
+            { num: 507, name: "Malwarebytes", url: "https://www.malwarebytes.com/",
+                desc: "AI-enhanced malware detection and removal.", cat: "security" },
+            { num: 67, name: "FaceCheck.id", url: "https://facecheck.id/", desc: "Find people online by uploading a photo.",
+                cat: "security" },
+            { num: 72, name: "Grabify", url: "https://grabify.link/", desc: "Create tracking links to see who clicks them.",
+                cat: "security" },
+            { num: 139, name: "Proxyium", url: "https://proxyium.com/", desc: "Use blocked websites without a VPN.",
+                cat: "security" },
+            { num: 178, name: "BitDefender Threat Map", url: "https://threatmap.bitdefender.com/",
+                desc: "Live global visualization of real-time cyber attacks.", cat: "security" },
+            { num: 157, name: "WhatsMyName", url: "https://whatsmyname.app/web",
+                desc: "Search for usernames across hundreds of websites.", cat: "security" },
+            { num: 174, name: "IPLogger", url: "https://iplogger.org/", desc: "Create new links and track who visits your URLs.",
+                cat: "security" },
+            { num: 215, name: "Pentester", url: "https://pentester.com/",
+                desc: "Check if your data is exposed — view critical security risks.", cat: "security" },
+            { num: 80, name: "GeoSpy.ai", url: "https://geospy.ai/",
+                desc: "Convert image pixels into actionable location intelligence.", cat: "security" },
+            { num: 819, name: "IDWise", url: "https://www.idwise.com/",
+                desc: "AI identity verification with 13,000+ ID documents.", cat: "security" },
+            { num: 885, name: "SURFSHARK", url: "https://get.surfshark.net/aff_c?offer_id=926&aff_id=25652",
+                desc: "VPN service with ad blocking and 24/7 support.", cat: "security" },
+            { num: 886, name: "Incogni", url: "https://get.incogni.io/aff_c?offer_id=1219&aff_id=25652",
+                desc: "AI data privacy tool that deletes your data from brokers.", cat: "security" },
+        ];
+
+        // ─── NEW CATEGORY: CRM & SALES TOOLS ───
+        // Add tools that don't fit existing categories
+        const CRM_TOOLS = [
+            { num: 438, name: "LandBot", url: "https://get.landbotlab.com/aiwebtools",
+                desc: "No-code chatbot builder for customer engagement.", cat: "crm-sales" },
+            { num: 441, name: "Moosend", url: "https://trymoo.moosend.com/aiwebtools",
+                desc: "Email marketing and automation platform with AI.", cat: "crm-sales" },
+            { num: 443, name: "OctaneAI", url: "https://octaneai.grsm.io/aiwebtools5757",
+                desc: "Personalized marketing toolset for Shopify stores.", cat: "crm-sales" },
+            { num: 444, name: "QuillBot", url: "https://try.quillbot.com/aiwebtools",
+                desc: "AI paraphrasing and writing assistant.", cat: "crm-sales" },
+            { num: 445, name: "RevealBot", url: "https://reveal.grsm.io/aiwebtools",
+                desc: "AI ad management automation for campaigns.", cat: "crm-sales" },
+            { num: 448, name: "Surfer AI", url: "https://get.surferseo.com/aiwebtools",
+                desc: "AI SEO content generation and optimization.", cat: "crm-sales" },
+            { num: 449, name: "VWO", url: "https://affiliates.vwo.com/aiwebtools",
+                desc: "Conversion rate optimization with A/B testing.", cat: "crm-sales" },
+            { num: 573, name: "Robin AI", url: "https://www.robinai.com/",
+                desc: "AI contract management for legal teams.", cat: "crm-sales" },
+            { num: 574, name: "LoopCV", url: "https://loopcv.pro/?via=Aiwebtools",
+                desc: "AI job application automation for interviews.", cat: "crm-sales" },
+            { num: 595, name: "Jasper", url: "https://jasper.ai/?utm_source=partner&fpr=aiwebtools",
+                desc: "AI content creation platform for marketing teams.", cat: "crm-sales" },
+            { num: 596, name: "Sonetel", url: "https://shareasale.com/r.cfm?b=1653778&u=3604681&m=102894&urllink=&afftrack=",
+                desc: "Local phone numbers and AI meeting minutes.", cat: "crm-sales" },
+            { num: 599, name: "Jason AI", url: "https://get.reply.io/aiwebtools",
+                desc: "B2B conversational AI for sales outreach.", cat: "crm-sales" },
+            { num: 628, name: "MeetAlfred", url: "https://meetalfred.com/?ref=ztg3ymv",
+                desc: "AI sales automation for LinkedIn, Email, and Twitter.", cat: "crm-sales" },
+            { num: 629, name: "MeetOtis", url: "https://meetotis.com/",
+                desc: "AI digital marketing for cross-channel ad campaigns.", cat: "crm-sales" },
+            { num: 630, name: "BannerBear", url: "https://www.bannerbear.com/?via=aiwebtools",
+                desc: "Marketing automation for social media visuals.", cat: "crm-sales" },
+            { num: 631, name: "Zopto", url: "https://zopto.com/?fpr=aiwebtools",
+                desc: "LinkedIn and Email lead generation automation.", cat: "crm-sales" },
+            { num: 633, name: "Taplio", url: "https://taplio.com/?via=Aiwebtools",
+                desc: "AI LinkedIn tool for content and personal branding.", cat: "crm-sales" },
+            { num: 641, name: "RevealBot", url: "https://reveal.grsm.io/aiwebtools",
+                desc: "Ad management automation for Facebook, Instagram, Google.", cat: "crm-sales" },
+            { num: 666, name: "Octopus CRM", url: "https://octopuscrm.io/#aiwebtools",
+                desc: "LinkedIn automation for prospecting and lead generation.", cat: "crm-sales" },
+            { num: 690, name: "ReplyAI", url: "https://get.reply.io/aiwebtools",
+                desc: "B2B conversational AI with Jason AI assistant.", cat: "crm-sales" },
+            { num: 749, name: "Seamless AI", url: "https://login.seamless.ai/invite/aiwebtools",
+                desc: "AI sales intelligence for lead identification and verification.", cat: "crm-sales" },
+            { num: 750, name: "LinkWhisper", url: "https://linkwhisper.com/ref/2399/?campaign=aiwebtools",
+                desc: "AI internal linking tool for WordPress SEO.", cat: "crm-sales" },
+            { num: 751, name: "Windsor.io", url: "https://windsor.io/?via=aiwebtools",
+                desc: "AI personalized video for customer engagement.", cat: "crm-sales" },
+            { num: 752, name: "GrowthBar", url: "https://growthbarseo.com/aiwebtools?afmc=md",
+                desc: "AI writing and SEO content optimization.", cat: "crm-sales" },
+            { num: 753, name: "SmartLead", url: "https://smartlead.ai/?via=aiwebtools",
+                desc: "AI lead generation with multi-channel outreach.", cat: "crm-sales" },
+            { num: 754, name: "SalesFlow", url: "https://salesflow.io/referral?fp_ref=aiwebtools",
+                desc: "AI LinkedIn lead generation platform.", cat: "crm-sales" },
+            { num: 755, name: "Outranking", url: "https://www.outranking.io/?via=aiwebtools",
+                desc: "AI content optimization and SEO platform.", cat: "crm-sales" },
+            { num: 756, name: "Scalenut", url: "https://scalenut.com/?fpr=aiwebtools",
+                desc: "AI content marketing and SEO platform.", cat: "crm-sales" },
+            { num: 757, name: "Ranked", url: "https://account.ranked.ai/r/W35LN8",
+                desc: "AI SEO with human-written blog content and backlinks.", cat: "crm-sales" },
+            { num: 758, name: "SurferSEO", url: "https://get.surferseo.com/aiwebtools",
+                desc: "AI SEO content creation and optimization.", cat: "crm-sales" },
+            { num: 759, name: "CopySpace.ai", url: "https://www.copyspace.ai/lifetime?ref=aiwebtools",
+                desc: "AI content creation with 100+ tools and GPT-4.", cat: "crm-sales" },
+            { num: 760, name: "Meet Alfred", url: "https://meetalfred.com/?ref=ztg3ymv",
+                desc: "AI sales automation for LinkedIn, Email, and Twitter.", cat: "crm-sales" },
+            { num: 761, name: "DIIB", url: "https://www.diib.com/?ref=njvimzh",
+                desc: "Automated SEO tool for website optimization.", cat: "crm-sales" },
+            { num: 762, name: "SEObility", url: "https://www.seobility.net/en/?px=2&a_aid=644f1c0e7893a",
+                desc: "Comprehensive online SEO software with auditing.", cat: "crm-sales" },
+            { num: 763, name: "SENDER AI", url: "https://www.sender.net/?ref=njq4zgn",
+                desc: "Email and SMS marketing platform with AI automation.", cat: "crm-sales" },
+            { num: 764, name: "AWEBER", url: "https://www.aweber.com/easy-email.htm?id=542846",
+                desc: "Email marketing platform with AI template generation.", cat: "crm-sales" },
+            { num: 765, name: "MailRush.io", url: "https://mailrush.io/portal/aff.php?aff=198",
+                desc: "Cold email software for B2B outreach.", cat: "crm-sales" },
+            { num: 766, name: "Sales Handy", url: "https://www.saleshandy.com/?p=v3&via=aiwebtools",
+                desc: "Cold email automation with high deliverability.", cat: "crm-sales" },
+            { num: 767, name: "ActiveCampaign", url: "https://www.activecampaign.com/?_r=6QXVM1N3",
+                desc: "Email marketing, automation, and CRM platform.", cat: "crm-sales" },
+            { num: 768, name: "GroupMail", url: "https://shareasale.com/r.cfm?b=3937&u=3604681&m=1465&urllink=&afftrack=",
+                desc: "Email marketing and automation with one-time payment.", cat: "crm-sales" },
+            { num: 769, name: "WarmBox", url: "https://warmbox.ai/?fpr=aiwebtools",
+                desc: "Email warm-up tool for improving deliverability.", cat: "crm-sales" },
+            { num: 770, name: "STRIPO", url: "https://stripo.email/?fpr=aiwebtools",
+                desc: "Email template creator with drag-and-drop and HTML editors.", cat: "crm-sales" },
+            { num: 771, name: "Benchmark Email", url: "https://www.benchmarkemail.com/?partner=1573326",
+                desc: "Email marketing with AI content generation and Smart Sending.", cat: "crm-sales" },
+            { num: 773, name: "SiteChecker AI", url: "https://shareasale.com/r.cfm?b=1501623&u=3604681&m=95321&urllink=&afftrack=",
+                desc: "Website SEO checker and audit tool.", cat: "crm-sales" },
+            { num: 774, name: "Webscrape AI", url: "https://webscrapeai.com/?via=fassm0gd3k5m7klwfyva",
+                desc: "AI web scraping tool for data collection.", cat: "crm-sales" },
+            { num: 775, name: "WP-Rocket", url: "https://shareasale.com/r.cfm?b=1840863&u=3604681&m=74778&urllink=&afftrack=",
+                desc: "WordPress caching plugin for website speed optimization.", cat: "crm-sales" },
+            { num: 776, name: "SimilarContent", url: "https://shareasale.com/r.cfm?b=1869923&u=3604681&m=116762&urllink=&afftrack=",
+                desc: "NLP-powered SEO content writing with GPT-3.", cat: "crm-sales" },
+            { num: 777, name: "Postaga", url: "https://partners.postaga.com/24669/137019",
+                desc: "AI outreach platform for cold emails and link building.", cat: "crm-sales" },
+            { num: 783, name: "BitSkout", url: "https://www.bitskout.com/?via=aiwebtools",
+                desc: "AI automation for back-office data extraction.", cat: "crm-sales" },
+            { num: 784, name: "SaneBox", url: "https://try.sanebox.com/aiwebtools",
+                desc: "AI email management tool for inbox organization.", cat: "crm-sales" },
+            { num: 786, name: "Revealbot", url: "https://reveal.grsm.io/aiwebtools",
+                desc: "AI ad management platform for campaign optimization.", cat: "crm-sales" },
+            { num: 787, name: "MooSend", url: "https://trymoo.moosend.com/a4cznx80rkkp",
+                desc: "Email marketing automation with AI subject line optimization.", cat: "crm-sales" },
+            { num: 788, name: "MarkCopy", url: "https://www.markcopy.ai/",
+                desc: "AI content creation platform with brand voice reflection.", cat: "crm-sales" },
+            { num: 789, name: "Juice.ai", url: "https://juice.ai/",
+                desc: "AI marketing automation for SEO, YouTube, and social media.", cat: "crm-sales" },
+            { num: 790, name: "KeywordInsights", url: "https://www.keywordinsights.ai/?via=aiwebtools",
+                desc: "AI keyword research and content briefing tool.", cat: "crm-sales" },
+            { num: 791, name: "Luna", url: "https://getluna.dev/",
+                desc: "AI lead generation and personalized email suggestions.", cat: "crm-sales" },
+            { num: 792, name: "Best Regards", url: "https://bestregards.app/",
+                desc: "AI email productivity tool with hybrid AI technology.", cat: "crm-sales" },
+            { num: 793, name: "GetResponse", url: "https://www.getresponse.com/?a=gnRgkfXWxx",
+                desc: "Email marketing platform with AI newsletters and automation.", cat: "crm-sales" },
+            { num: 794, name: "Regie.ai", url: "https://www.regie.ai/",
+                desc: "AI co-pilot for enterprise sales prospecting.", cat: "crm-sales" },
+            { num: 795, name: "FOLK", url: "https://www.folk.app/",
+                desc: "AI CRM for sales, recruiting, and partnerships.", cat: "crm-sales" },
+            { num: 796, name: "Hunter.io", url: "https://hunter.io/",
+                desc: "Email outreach platform with contact discovery and verification.", cat: "crm-sales" },
+            { num: 797, name: "ContactOut", url: "https://contactout.com/",
+                desc: "Candidate and prospect sourcing with contact information.", cat: "crm-sales" },
+            { num: 798, name: "DirectIQ", url: "https://www.directiq.com/?gr_pk=9aWp&gr_uid=5q8A",
+                desc: "Email marketing platform with drag-and-drop editor.", cat: "crm-sales" },
+            { num: 799, name: "SalesFlare", url: "https://salesflare.grsm.io/aiwebtools",
+                desc: "AI CRM for small and medium-sized B2B businesses.", cat: "crm-sales" },
+            { num: 803, name: "Morningscore", url: "https://morningscore.io/?fpr=aiwebtools",
+                desc: "All-in-one SEO tool for keyword tracking and competitor analysis.", cat: "crm-sales" },
+            { num: 807, name: "Nando AI Chat", url: "https://nando.ai/?ref=yzi3yje",
+                desc: "AI copywriting tool for online businesses.", cat: "crm-sales" },
+            { num: 812, name: "CopyMonkey", url: "https://copymonkey.ai/?via=aiwebtools",
+                desc: "AI Amazon listing optimization with keyword placement.", cat: "crm-sales" },
+            { num: 814, name: "Octane AI", url: "https://octaneai.grsm.io/aiwebtools5757",
+                desc: "Personalized marketing toolset for Shopify stores.", cat: "crm-sales" },
+            { num: 815, name: "PIXELME", url: "https://ps.pixelme.me/to7vu4uazga6",
+                desc: "AI Amazon rank optimization and external traffic tools.", cat: "crm-sales" },
+            { num: 816, name: "CopySmith", url: "https://copysmith.ai/#a_aid=Aiwebtools&a_bid=1b7f753b",
+                desc: "AI eCommerce content generation for product descriptions.", cat: "crm-sales" },
+            { num: 817, name: "Standuply", url: "https://standuply.com/",
+                desc: "AI assistant for agile workflows and standup meetings.", cat: "crm-sales" },
+            { num: 820, name: "Looti", url: "https://www.looti.io/",
+                desc: "AI B2B lead generation with hyperqualified prospects.", cat: "crm-sales" },
+            { num: 823, name: "MARA Solutions", url: "https://www.mara-solutions.com/",
+                desc: "AI review response generator for customer feedback.", cat: "crm-sales" },
+            { num: 824, name: "Humantic AI", url: "https://humantic.ai/",
+                desc: "AI buyer intelligence with personality profiling.", cat: "crm-sales" },
+            { num: 825, name: "MarkoPolo", url: "https://app.markopolo.ai/signup?ref=ymu5nmm",
+                desc: "AI automated paid marketing for multiple platforms.", cat: "crm-sales" },
+            { num: 827, name: "Hints AI", url: "https://i.hints.so/auth/?ref=aiwebtools",
+                desc: "AI CRM update assistant for sales professionals.", cat: "crm-sales" },
+            { num: 830, name: "GPTdash", url: "https://jvz6.com/c/2848457/394242/",
+                desc: "AI content creation dashboard for businesses.", cat: "crm-sales" },
+            { num: 831, name: "Rationale", url: "https://rationale.jina.ai/",
+                desc: "AI decision-making tool with pros and cons analysis.", cat: "crm-sales" },
+            { num: 833, name: "WooSender", url: "https://woosender.com/",
+                desc: "AI lead conversion with SMS, email, and live chat.", cat: "crm-sales" },
+            { num: 834, name: "Noty.ai", url: "https://noty.cello.so/Q8cxmRnS0oK",
+                desc: "AI meeting productivity with transcription and summaries.", cat: "crm-sales" },
+            { num: 835, name: "Wordsmith", url: "https://www.wordsmith.ai/",
+                desc: "AI platform for in-house legal teams with privacy focus.", cat: "crm-sales" },
+            { num: 836, name: "Crystal", url: "https://www.crystalknows.com/",
+                desc: "AI personality-based communication for emails and calls.", cat: "crm-sales" },
+            { num: 837, name: "ZipChat", url: "https://zipchat.ai/?via=aiwebtools",
+                desc: "AI chatbot for online retailers to boost sales.", cat: "crm-sales" },
+            { num: 841, name: "NeuralText", url: "https://www.neuraltext.com/?via=aiwebtools",
+                desc: "AI content generation with SEO optimization.", cat: "crm-sales" },
+            { num: 842, name: "Clickable", url: "https://www.clickable.so/",
+                desc: "AI ad generation for brand-consistent ads in seconds.", cat: "crm-sales" },
+            { num: 843, name: "JUST CLUCK", url: "https://justcluck.com/business-tools/",
+                desc: "AI content creation with SEO analysis and keyword clustering.", cat: "crm-sales" },
+            { num: 846, name: "OpenChat", url: "https://openchat.so/",
+                desc: "AI chatbot platform for customer support and engagement.", cat: "crm-sales" },
+            { num: 847, name: "Windsor.ai", url: "https://windsor.ai/?fpr=kenneth17",
+                desc: "AI marketing attribution for customer journey analysis.", cat: "crm-sales" },
+            { num: 852, name: "GumRoad", url: "https://discover.gumroad.com/?a=315861715",
+                desc: "E-commerce platform for creators to sell digital products.", cat: "crm-sales" },
+            { num: 853, name: "Shopify", url: "https://shopify.pxf.io/21g550",
+                desc: "E-commerce platform with AI-powered features.", cat: "crm-sales" },
+            { num: 854, name: "Pluto Finance AI", url: "https://www.pluto.fi/",
+                desc: "AI investment platform with real-time data and automation.", cat: "crm-sales" },
+            { num: 856, name: "Likely.ai", url: "https://my.likely.ai/Kely?ref=owe2ytc",
+                desc: "AI real estate platform with predictive seller analysis.", cat: "crm-sales" },
+            { num: 857, name: "CityBLDR", url: "https://www.citybldr.com/",
+                desc: "AI real estate platform for site identification and analysis.", cat: "crm-sales" },
+            { num: 858, name: "Guesty AI", url: "https://hubs.li/Q01QkLdJ0",
+                desc: "AI property management for rentals and hospitality.", cat: "crm-sales" },
+            { num: 859, name: "CLOZE", url: "https://www.cloze.com/app/ai-insights",
+                desc: "AI insights for real estate and mortgage businesses.", cat: "crm-sales" },
+            { num: 861, name: "MARKY", url: "https://mymarky.ai/",
+                desc: "AI social media marketing tool for small businesses.", cat: "crm-sales" },
+            { num: 872, name: "The Oasis", url: "https://www.theoasis.com/",
+                desc: "AI writing tool that transforms voice into eloquent text.", cat: "crm-sales" },
+            { num: 874, name: "Alethea AI", url: "https://alethea.ai/signup?referral_code=208dce5e-9fd0-42a6-9002-f045d22d694f",
+                desc: "AI character creation and NFT platform.", cat: "crm-sales" },
+            { num: 875, name: "NOAH'S ARK", url: "https://noahsark.ai/signup?referral_code=208dce5e-9fd0-42a6-9002-f045d22d694f",
+                desc: "Decentralized protocol for intelligent NFTs and metaverse.", cat: "crm-sales" },
+            { num: 880, name: "TileDesk", url: "https://tiledesk.com/?via=aiwebtools",
+                desc: "AI customer engagement platform with chatbots and live chat.", cat: "crm-sales" },
+            { num: 882, name: "VJump", url: "https://vjump.com/",
+                desc: "AI video editing app with 1500+ transition scenes.", cat: "crm-sales" },
+            { num: 883, name: "PatternedAI", url: "https://www.patterned.ai/?via=aiwebtools",
+                desc: "AI pattern generation for products and textiles.", cat: "crm-sales" },
+            { num: 884, name: "UnboundML", url: "http://unboundml.com/?via=aiwebtools",
+                desc: "Custom AI tools for business, marketing, and automation.", cat: "crm-sales" },
+            { num: 888, name: "TAJA AI", url: "https://www.taja.ai/?via=aiwebtools",
+                desc: "AI YouTube metadata specialist for SEO optimization.", cat: "crm-sales" },
+            { num: 889, name: "ChatBotKit", url: "https://chatbotkit.com/?via=aiwebtools",
+                desc: "AI chatbot builder for websites, Slack, and Discord.", cat: "crm-sales" },
+            { num: 890, name: "Tinq.ai", url: "https://tinq.ai/?via=aiwebtools",
+                desc: "NLP text analysis with writing assistant and paraphrasing.", cat: "crm-sales" },
+            { num: 891, name: "Quiz Gecko", url: "https://quizgecko.com/?via=aiwebtools",
+                desc: "AI quiz and exam generator from content.", cat: "crm-sales" },
+            { num: 892, name: "JBoard", url: "https://jboard.io/?via=aiwebtools",
+                desc: "AI job board software for recruitment and hiring.", cat: "crm-sales" },
+            { num: 894, name: "Stock AI", url: "https://www.stockai.com/",
+                desc: "AI stock image search engine with Stable Diffusion and DALL-E.", cat: "crm-sales" },
+            { num: 898, name: "Aragon", url: "https://www.aragon.ai/?via=aiwebtools",
+                desc: "AI headshot generator from selfies with custom models.", cat: "crm-sales" },
+            { num: 899, name: "Teleport HQ", url: "https://teleporthq.io/",
+                desc: "AI front-end platform for UI development and static websites.", cat: "crm-sales" },
+            { num: 904, name: "Maverick", url: "https://www.trymaverick.com/?via=aiwebtools",
+                desc: "AI video marketing platform for ecommerce brands.", cat: "crm-sales" },
+            { num: 905, name: "Albus", url: "https://springworks.in/albus/?via=aiwebtools",
+                desc: "AI chatbot for Slack workspaces with company knowledge.", cat: "crm-sales" },
+            { num: 907, name: "Adobe Firefly", url: "https://www.adobe.com/sensei/generative-ai/firefly.html",
+                desc: "Adobe's generative AI for text-to-image and text-to-vector.", cat: "crm-sales" },
+            { num: 908, name: "Adobe Sensei", url: "https://www.adobe.com/sensei.html",
+                desc: "Adobe's AI framework for creative and marketing products.", cat: "crm-sales" },
+            { num: 909, name: "Cogniflow Playground", url: "https://www.cogniflow.ai/ai-playground",
+                desc: "Interactive AI model demos for receipt data, transcription, and more.", cat: "crm-sales" },
+            { num: 910, name: "Interior AI", url: "https://interiorai.com/?via=aiwebtools",
+                desc: "AI interior design tool for room visualization.", cat: "crm-sales" },
+            { num: 911, name: "Galactica by META", url: "https://galactica.org/explore/",
+                desc: "Meta's AI with citation capabilities for academic research.", cat: "crm-sales" },
+            { num: 915, name: "AI Web Tools GPT", url: "https://ai-webtools.com/aiwebtools-ai#03326d92-b31a-4816-8f36-bd3c47a4bc3f",
+                desc: "AI tool advisor that recommends tools based on your project.", cat: "crm-sales" },
+            { num: 916, name: "OpenArt", url: "https://openart.ai/?via=aiwebtools",
+                desc: "AI creative tool for generating image variations and styles.", cat: "crm-sales" },
+            { num: 917, name: "GenExpert", url: "https://genexpert.io?aff=DM2Np",
+                desc: "AI chat enhancement with dynamic characters and prompts.", cat: "crm-sales" },
+            { num: 922, name: "Telescope", url: "https://telescope.co/",
+                desc: "AI stock discovery and portfolio creation for brokerage apps.", cat: "crm-sales" },
+            { num: 923, name: "Flow XO", url: "https://flowxo.com/?fpr=mi0kk",
+                desc: "No-code AI chatbot builder for customer engagement.", cat: "crm-sales" },
+            { num: 924, name: "CoinRule", url: "https://coinrule.com/",
+                desc: "AI automated trading platform for cryptocurrencies.", cat: "crm-sales" },
+            { num: 925, name: "Pionex", url: "https://www.pionex.us/en-US/signUp/ref/eXZSr7jm",
+                desc: "AI crypto trading with built-in auto-trading bots.", cat: "crm-sales" },
+            { num: 926, name: "LiveChat", url: "https://www.livechat.com/?a=QfKE86yVR&utm_campaign=pp_livechat-default&utm_source=PP",
+                desc: "AI customer service platform with chatbots and engagement.", cat: "crm-sales" },
+            { num: 927, name: "HelpDesk", url: "https://www.helpdesk.com/?a=QfKE86yVR&utm_campaign=pp_helpdesk-default&utm_source=PP",
+                desc: "AI customer support tool with multi-channel inbox.", cat: "crm-sales" },
+            { num: 928, name: "Mobile Monkey", url: "https://customers.ai/?a_aid=aiwebtools",
+                desc: "AI sales funnel and B2C prospecting platform.", cat: "crm-sales" },
+            { num: 930, name: "Active Campaign", url: "https://www.activecampaign.com/feature/ai-powered-automation/?_r=CSLQ5D33",
+                desc: "AI-powered automation builder for customer journeys.", cat: "crm-sales" },
+            { num: 931, name: "CryptoHopper", url: "https://www.cryptohopper.com/?atid=32730",
+                desc: "AI crypto trading bot platform for automated trading.", cat: "crm-sales" },
+        ];
+
+        // Merge all tools
+        TOOLS.push(...CRM_TOOLS);
+
+        // Remove duplicates by name (case-insensitive)
+        const seen = new Set();
+        const uniqueTools = TOOLS.filter(t => {
+            const key = t.name.toLowerCase().trim();
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+
+        // ─── CATEGORY CONFIG (with new categories) ───
+        const CATEGORIES = [
+            { id: "all", label: "⚡ All Tools", icon: "⚡", title: "All Tools" },
+            { id: "ai-assistants", label: "🤖 AI Assistants", icon: "🤖", title: "AI Assistants & Chat" },
+            { id: "image-gen", label: "🎨 Image Generation", icon: "🎨", title: "Image Generation" },
+            { id: "image-edit", label: "🖼️ Image Editing", icon: "🖼️", title: "Image Editing & Tools" },
+            { id: "avatars", label: "👤 Avatars", icon: "👤", title: "Avatars & Portraits" },
+            { id: "video", label: "🎬 Video", icon: "🎬", title: "Video Creation & Editing" },
+            { id: "audio", label: "🎵 Audio & Music", icon: "🎵", title: "Audio, Voice & Music" },
+            { id: "writing", label: "✍️ Writing", icon: "✍️", title: "Writing & Content" },
+            { id: "research", label: "🔬 Research", icon: "🔬", title: "Research & Learning" },
+            { id: "coding", label: "💻 Coding", icon: "💻", title: "Coding & Development" },
+            { id: "presentations", label: "📊 Presentations", icon: "📊", title: "Presentations & Infographics" },
+            { id: "design", label: "🎭 Design", icon: "🎭", title: "Design & Creative" },
+            { id: "website", label: "🌐 Websites", icon: "🌐", title: "Website Builders" },
+            { id: "3d", label: "🧊 3D & Animation", icon: "🧊", title: "3D & Animation" },
+            { id: "pdf", label: "📄 PDF & Files", icon: "📄", title: "PDF & File Tools" },
+            { id: "social", label: "📣 Social & Marketing", icon: "📣", title: "Social Media & Marketing" },
+            { id: "utility", label: "🛠️ Utility", icon: "🛠️", title: "Utility & Productivity" },
+            { id: "security", label: "🛡️ Security", icon: "🛡️", title: "Security & Privacy" },
+            { id: "crm-sales", label: "📈 CRM & Sales", icon: "📈", title: "CRM & Sales Tools" },
+        ];
+
+        const PREVIEW_COUNT = 6;
+
+        // ─── STATE ───
+        let currentCat = 'all';
+        let currentQuery = '';
+        const expandedSections = new Set();
+
+        // ─── BUILD FILTER BUTTONS ───
+        function buildFilters() {
+            const desktopContainer = document.getElementById('desktop-filters');
+            const mobileContainer = document.getElementById('nav-filters');
+
+            const counts = {};
+            uniqueTools.forEach(t => {
+                counts[t.cat] = (counts[t.cat] || 0) + 1;
+            });
+            counts['all'] = uniqueTools.length;
+
+            // Update stats
+            document.getElementById('total-tools').textContent = uniqueTools.length + '+';
+            document.getElementById('total-cats').textContent = CATEGORIES.filter(c => c.id !== 'all').length + '+';
+
+            CATEGORIES.forEach(cat => {
+                const count = counts[cat.id] || 0;
+                if (cat.id !== 'all' && count === 0) return;
+
+                const dBtn = document.createElement('button');
+                dBtn.className = 'filter-btn' + (cat.id === 'all' ? ' active' : '');
+                dBtn.dataset.cat = cat.id;
+                dBtn.textContent = cat.label;
+                desktopContainer.appendChild(dBtn);
+
+                const mBtn = document.createElement('button');
+                mBtn.className = 'filter-btn' + (cat.id === 'all' ? ' active' : '');
+                mBtn.dataset.cat = cat.id;
+                mBtn.innerHTML = `<span>${cat.label}</span><span class="cat-count">${count}</span>`;
+                mobileContainer.appendChild(mBtn);
+            });
+
+            desktopContainer.addEventListener('click', e => {
+                const btn = e.target.closest('.filter-btn');
+                if (btn) syncFilters(btn.dataset.cat);
+            });
+            mobileContainer.addEventListener('click', e => {
+                const btn = e.target.closest('.filter-btn');
+                if (btn) {
+                    syncFilters(btn.dataset.cat);
+                    hamburger.classList.remove('open');
+                    navMenu.classList.remove('open');
+                }
+            });
+        }
+
+        function syncFilters(cat) {
+            currentCat = cat;
+            expandedSections.clear();
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.cat === cat);
+            });
+            applyFilters();
+        }
+
+        // ─── FILTER & RENDER ───
+        function applyFilters() {
+            let filtered = uniqueTools;
+            if (currentCat !== 'all') {
+                filtered = filtered.filter(t => t.cat === currentCat);
+            }
+            if (currentQuery) {
+                const q = currentQuery.toLowerCase();
+                filtered = filtered.filter(t =>
+                    t.name.toLowerCase().includes(q) ||
+                    t.desc.toLowerCase().includes(q) ||
+                    t.url.toLowerCase().includes(q)
+                );
+            }
+            renderAll(filtered);
+        }
+
+        function renderAll(filtered) {
+            const main = document.getElementById('main-content');
+            const noResults = document.getElementById('no-results');
+            main.innerHTML = '';
+            main.appendChild(noResults);
+
+            if (!filtered.length) {
+                noResults.style.display = 'block';
+                return;
+            }
+            noResults.style.display = 'none';
+
+            const isSearching = currentQuery.length > 0;
+
+            const grouped = {};
+            filtered.forEach(t => {
+                if (!grouped[t.cat]) grouped[t.cat] = [];
+                grouped[t.cat].push(t);
+            });
+
+            CATEGORIES.forEach(catDef => {
+                if (catDef.id === 'all') return;
+                const items = grouped[catDef.id];
+                if (!items || items.length === 0) return;
+
+                const showAll = isSearching || expandedSections.has(catDef.id) || currentCat !== 'all';
+                const visibleItems = showAll ? items : items.slice(0, PREVIEW_COUNT);
+                const hasMore = items.length > PREVIEW_COUNT;
+
+                const section = document.createElement('div');
+                section.className = 'section';
+                section.id = 'section-' + catDef.id;
+
+                const header = document.createElement('div');
+                header.className = 'section-header';
+                header.innerHTML = `
+              <div class="section-icon">${catDef.icon}</div>
+              <h2 class="section-title">${catDef.title}</h2>
+              <div class="section-meta">
+                <span class="section-count">${items.length} tool${items.length !== 1 ? 's' : ''}</span>
+              </div>
+            `;
+                section.appendChild(header);
+
+                const grid = document.createElement('div');
+                grid.className = 'card-grid';
+                visibleItems.forEach(tool => {
+                    grid.appendChild(createCard(tool));
+                });
+                section.appendChild(grid);
+
+                if (hasMore && !isSearching && currentCat === 'all') {
+                    const footer = document.createElement('div');
+                    footer.className = 'section-footer';
+                    const isExpanded = expandedSections.has(catDef.id);
+                    const btn = document.createElement('button');
+                    btn.className = 'show-more-btn' + (isExpanded ? ' expanded' : '');
+                    btn.innerHTML = isExpanded ?
+                        `Show less <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>` :
+                        `Show all ${items.length} tools <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>`;
+                    btn.addEventListener('click', () => {
+                        if (expandedSections.has(catDef.id)) {
+                            expandedSections.delete(catDef.id);
+                        } else {
+                            expandedSections.add(catDef.id);
+                        }
+                        applyFilters();
+                        setTimeout(() => {
+                            document.getElementById('section-' + catDef.id)?.scrollIntoView({ behavior: 'smooth',
+                                block: 'start' });
+                        }, 50);
+                    });
+                    footer.appendChild(btn);
+                    section.appendChild(footer);
+                }
+
+                main.appendChild(section);
+            });
+        }
+
+        function createCard(tool) {
+            const card = document.createElement('a');
+            card.className = 'card';
+            card.href = tool.url;
+            card.target = '_blank';
+            card.rel = 'noopener noreferrer';
+            let hostname = '';
+            try { hostname = new URL(tool.url).hostname.replace('www.', ''); } catch (e) { hostname = tool.url; }
+            card.innerHTML = `
+            <div class="card-num">#${tool.num}</div>
+            <div class="card-name">
+              ${tool.name}
+              <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></svg>
+            </div>
+            <div class="card-desc">${tool.desc}</div>
+            <div class="card-url">${hostname}</div>
+          `;
+            return card;
+        }
+
+        // ─── SEARCH ───
+        document.getElementById('search').addEventListener('input', e => {
+            currentQuery = e.target.value.trim();
+            document.getElementById('mobile-search').value = e.target.value;
+            applyFilters();
+        });
+        document.getElementById('mobile-search').addEventListener('input', e => {
+            currentQuery = e.target.value.trim();
+            document.getElementById('search').value = e.target.value;
+            applyFilters();
+        });
+
+        // ─── INIT ───
+        buildFilters();
+        applyFilters();
+    </script>
+</body>
+</html>
